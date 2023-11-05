@@ -1,17 +1,18 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ReportsService } from './reports.service';
-import { Report } from './report.entity';
+import { AsNumberService } from './as-number.service';
+import { Report } from './as-number.entity';
 import { PaginationResults } from './types/pagination-results.interface';
 
 @Controller('reports/asnumber/')
-export class ReportsController {
-  constructor(private readonly reportsService: ReportsService) {}
+export class AsNumberController {
+  constructor(private readonly reportsService: AsNumberService) {}
   @Get()
   getReports(
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
     @Query('asName') asName?: string,
+    @Query('asn') asn?: string,
   ): Promise<PaginationResults<Report>> {
-    return this.reportsService.getReports(page, pageSize, asName);
+    return this.reportsService.getReports(page, pageSize, asName, asn);
   }
 }

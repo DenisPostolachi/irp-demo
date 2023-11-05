@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Report } from './report.entity';
+import { Report } from './as-number.entity';
 import { PaginationResults } from './types/pagination-results.interface';
 
 @Injectable()
-export class ReportsService {
+export class AsNumberService {
   constructor(
     @InjectRepository(Report)
     private reportsRepository: Repository<Report>,
@@ -15,6 +15,7 @@ export class ReportsService {
     page = 1,
     pageSize = 10,
     asName?: string,
+    asn?: string,
   ): Promise<PaginationResults<Report>> {
     const queryBuilder = this.reportsRepository.createQueryBuilder('report');
 
@@ -22,6 +23,10 @@ export class ReportsService {
       queryBuilder.andWhere('report.as_name ILIKE :asName', {
         asName: `%${asName}%`,
       });
+    }
+
+    if (asn) {
+      queryBuilder.andWhere('report.asn = :asn', { asn });
     }
 
     queryBuilder.take(pageSize);

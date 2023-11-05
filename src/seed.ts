@@ -1,20 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { SeederModule } from './seed/seeder.module';
-import { ReportSeederService } from './seed/report.seeder.service';
+import { AsNumberSeederService } from './seed/as-number.seeder.service';
+import { TimelineGraphSeederService } from './seed/timeline-graph.seeder.service';
 
 async function seed() {
   const appContext = await NestFactory.createApplicationContext(SeederModule);
 
-  const seeder = appContext.get(ReportSeederService);
-  await seeder
-    .seedMultipleReports(70)
-    .then(() => {
-      console.log('Seeding complete!');
-    })
-    .catch((error) => {
-      console.error('Seeding failed!', error);
-    })
-    .finally(() => appContext.close());
+  try {
+    const asNumberSeeder = appContext.get(AsNumberSeederService);
+    await asNumberSeeder.seedMultipleReports(50);
+    console.log('AS Number Seeding complete!');
+
+    const timelineSeeder = appContext.get(TimelineGraphSeederService);
+    await timelineSeeder.seedMultipleTimeLineData(70);
+    console.log('Timeline Graph Seeding complete!');
+  } catch (error) {
+    console.error('Seeding failed!', error);
+  } finally {
+    await appContext.close();
+  }
 }
 
 seed();

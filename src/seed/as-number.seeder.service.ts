@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Report } from '../reports/asNumber/report.entity';
+import { Report } from '../reports/as-number/as-number.entity';
+import { generateRandomString } from '../helpers/helpers';
 
 @Injectable()
-export class ReportSeederService {
+export class AsNumberSeederService {
   constructor(
     @InjectRepository(Report)
     private readonly reportRepository: Repository<Report>,
@@ -20,7 +21,7 @@ export class ReportSeederService {
 
   private async seedSingleReport(): Promise<Report> {
     const reportData = {
-      as_name: this.generateRandomString(10),
+      as_name: generateRandomString(10),
       volume: Math.floor(Math.random() * 10000),
       asn: Math.floor(Math.random() * 10000),
       improvements: Math.floor(Math.random() * 100),
@@ -29,18 +30,5 @@ export class ReportSeederService {
     };
 
     return this.reportRepository.save(reportData);
-  }
-
-  private generateRandomString(length: number): string {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    const charactersLength = characters.length;
-
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-
-    return result;
   }
 }
