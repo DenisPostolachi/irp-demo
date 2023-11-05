@@ -12,7 +12,14 @@ export class AsNumberController {
     @Query('pageSize') pageSize: number,
     @Query('asName') asName?: string,
     @Query('asn') asn?: string,
+    @Query('sortOrder') sortOrder?: 'ASC' | 'DESC',
   ): Promise<PaginationResults<AsNumber>> {
-    return this.reportsService.getReports(page, pageSize, asName, asn);
+    return this.reportsService.getReports(
+      page,
+      pageSize,
+      asName,
+      asn,
+      sortOrder,
+    );
   }
 }

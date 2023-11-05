@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AsNumberModule } from './reports/as-number/as-number.module';
+import { AsNumberModule } from './modules/reports/as-number/as-number.module';
 import { SeederModule } from './seed/seeder.module';
-import { TimeLineModule } from './graphs/timeline/timeline.module';
-import { HistoricalRecordModule } from './reports/historical-record/historical-record.module';
+import { TimeLineModule } from './modules/graphs/timeline/timeline.module';
+import { HistoricalRecordModule } from './modules/reports/historical-record/historical-record.module';
 
 @Module({
   imports: [

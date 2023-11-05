@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AsNumber } from '../reports/as-number/as-number.entity';
-import { TimeLine } from '../graphs/timeline/timeline.entity';
+import { AsNumber } from '../modules/reports/as-number/as-number.entity';
+import { TimeLine } from '../modules/graphs/timeline/timeline.entity';
 import { AsNumberSeederService } from './as-number.seeder.service';
 import { TimelineGraphSeederService } from './timeline-graph.seeder.service';
 import { HistoricalRecordSeederService } from './historical-record.seeder.service';
-import { HistoricalRecord } from '../reports/historical-record/historical-record.entity';
+import { HistoricalRecord } from '../modules/reports/historical-record/historical-record.entity';
 
 @Module({
   imports: [

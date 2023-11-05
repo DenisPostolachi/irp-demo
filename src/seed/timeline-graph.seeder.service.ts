@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TimeLine } from '../graphs/timeline/timeline.entity';
+import { TimeLine } from '../modules/graphs/timeline/timeline.entity';
 
 @Injectable()
 export class TimelineGraphSeederService {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HistoricalRecord } from '../reports/historical-record/historical-record.entity';
+import { HistoricalRecord } from '../modules/reports/historical-record/historical-record.entity';
 import { generateRandomIP, generateRandomString } from '../helpers/helpers';
 
 @Injectable()

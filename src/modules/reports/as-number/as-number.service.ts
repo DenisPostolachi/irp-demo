@@ -16,18 +16,21 @@ export class AsNumberService {
     pageSize = 10,
     asName?: string,
     asn?: string,
+    sortOrder: 'ASC' | 'DESC' = 'ASC',
   ): Promise<PaginationResults<AsNumber>> {
     const queryBuilder = this.reportsRepository.createQueryBuilder('as_number');
 
     if (asName) {
-      queryBuilder.andWhere('report.as_name ILIKE :asName', {
+      queryBuilder.andWhere('as_number.as_name ILIKE :asName', {
         asName: `%${asName}%`,
       });
     }
 
     if (asn) {
-      queryBuilder.andWhere('report.asn = :asn', { asn });
+      queryBuilder.andWhere('as_number.asn = :asn', { asn });
     }
+
+    queryBuilder.orderBy('as_number.created_at', sortOrder);
 
     queryBuilder.take(pageSize);
     queryBuilder.skip((page - 1) * pageSize);

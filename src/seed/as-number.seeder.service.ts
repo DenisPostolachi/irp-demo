@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AsNumber } from '../reports/as-number/as-number.entity';
+import { AsNumber } from '../modules/reports/as-number/as-number.entity';
 import { generateRandomString } from '../helpers/helpers';
 
 @Injectable()
