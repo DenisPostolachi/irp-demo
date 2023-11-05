@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Report } from '../reports/as-number/as-number.entity';
+import { AsNumber } from '../reports/as-number/as-number.entity';
 import { generateRandomString } from '../helpers/helpers';
 
 @Injectable()
 export class AsNumberSeederService {
   constructor(
-    @InjectRepository(Report)
-    private readonly reportRepository: Repository<Report>,
+    @InjectRepository(AsNumber)
+    private readonly reportRepository: Repository<AsNumber>,
   ) {}
 
   async seedMultipleReports(times: number): Promise<void> {
@@ -19,7 +19,7 @@ export class AsNumberSeederService {
     await Promise.all(promises);
   }
 
-  private async seedSingleReport(): Promise<Report> {
+  private async seedSingleReport(): Promise<AsNumber> {
     const reportData = {
       as_name: generateRandomString(10),
       volume: Math.floor(Math.random() * 10000),

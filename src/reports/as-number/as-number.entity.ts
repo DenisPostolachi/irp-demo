@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Report {
+export class AsNumber {
   @PrimaryGeneratedColumn()
   id: number;
 

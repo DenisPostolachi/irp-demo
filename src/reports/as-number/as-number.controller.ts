@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AsNumberService } from './as-number.service';
-import { Report } from './as-number.entity';
+import { AsNumber } from './as-number.entity';
 import { PaginationResults } from './types/pagination-results.interface';
 
 @Controller('reports/asnumber/')
@@ -12,7 +12,7 @@ export class AsNumberController {
     @Query('pageSize') pageSize: number,
     @Query('asName') asName?: string,
     @Query('asn') asn?: string,
-  ): Promise<PaginationResults<Report>> {
+  ): Promise<PaginationResults<AsNumber>> {
     return this.reportsService.getReports(page, pageSize, asName, asn);
   }
 }

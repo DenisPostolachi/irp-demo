@@ -8,11 +8,11 @@ async function seed() {
 
   try {
     const asNumberSeeder = appContext.get(AsNumberSeederService);
-    await asNumberSeeder.seedMultipleReports(50);
+    await asNumberSeeder.seedMultipleReports(10);
     console.log('AS Number Seeding complete!');
 
     const timelineSeeder = appContext.get(TimelineGraphSeederService);
-    await timelineSeeder.seedMultipleTimeLineData(70);
+    await timelineSeeder.seedMultipleTimeLineData(10);
     console.log('Timeline Graph Seeding complete!');
   } catch (error) {
     console.error('Seeding failed!', error);

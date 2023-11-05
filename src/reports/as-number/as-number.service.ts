@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Report } from './as-number.entity';
+import { AsNumber } from './as-number.entity';
 import { PaginationResults } from './types/pagination-results.interface';
 
 @Injectable()
 export class AsNumberService {
   constructor(
-    @InjectRepository(Report)
-    private reportsRepository: Repository<Report>,
+    @InjectRepository(AsNumber)
+    private reportsRepository: Repository<AsNumber>,
   ) {}
 
   async getReports(
@@ -16,7 +16,7 @@ export class AsNumberService {
     pageSize = 10,
     asName?: string,
     asn?: string,
-  ): Promise<PaginationResults<Report>> {
+  ): Promise<PaginationResults<AsNumber>> {
     const queryBuilder = this.reportsRepository.createQueryBuilder('report');
 
     if (asName) {
@@ -35,7 +35,7 @@ export class AsNumberService {
     const [results, total] = await queryBuilder.getManyAndCount();
 
     return {
-      data: results,
+      data: [results],
       count: total,
       currentPage: page,
       nextPage: total > page * pageSize ? page + 1 : null,

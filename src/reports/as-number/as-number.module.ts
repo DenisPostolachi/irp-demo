@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AsNumberService } from './as-number.service';
 import { AsNumberController } from './as-number.controller';
-import { Report } from './as-number.entity';
+import { AsNumber } from './as-number.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Report])],
+  imports: [TypeOrmModule.forFeature([AsNumber])],
   controllers: [AsNumberController],
   providers: [AsNumberService],
 })

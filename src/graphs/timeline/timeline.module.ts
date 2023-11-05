@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TimelineService } from './timeline.service';
-import { TimelineController } from './timeline.controller';
+import { TimeLineService } from './timeline.service';
+import { TimeLineController } from './timeline.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TimeLine } from './timeline.entity';
 
 @Module({
-  controllers: [TimelineController],
-  providers: [TimelineService],
+  imports: [TypeOrmModule.forFeature([TimeLine])],
+  controllers: [TimeLineController],
+  providers: [TimeLineService],
 })
-export class TimelineModule {}
+export class TimeLineModule {}

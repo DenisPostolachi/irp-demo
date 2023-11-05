@@ -1,7 +1,16 @@
-import { Controller } from '@nestjs/common';
-import { TimelineService } from './timeline.service';
+import { Controller, Get, Query } from '@nestjs/common';
+import { TimeLineService } from './timeline.service';
+import { TimeLine } from './timeline.entity';
 
-@Controller('timeline')
-export class TimelineController {
-  constructor(private readonly timelineService: TimelineService) {}
+@Controller('graphs/timeline')
+export class TimeLineController {
+  constructor(private readonly timelineService: TimeLineService) {}
+
+  @Get()
+  getTimeLineGraph(
+    @Query('start') start: Date,
+    @Query('end') end: Date,
+  ): Promise<{ data: TimeLine[][] }> {
+    return this.timelineService.getTimeLineGraph(start, end);
+  }
 }
