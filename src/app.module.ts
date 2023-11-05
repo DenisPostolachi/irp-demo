@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AsNumberModule } from './reports/as-number/as-number.module';
 import { SeederModule } from './seed/seeder.module';
 import { TimeLineModule } from './graphs/timeline/timeline.module';
-import { HistoricalRecordsModule } from './reports/historical-records/historical-records.module';
+import { HistoricalRecordModule } from './reports/historical-record/historical-record.module';
 
 @Module({
   imports: [
@@ -22,9 +20,9 @@ import { HistoricalRecordsModule } from './reports/historical-records/historical
     AsNumberModule,
     TimeLineModule,
     SeederModule,
-    HistoricalRecordsModule,
+    HistoricalRecordModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

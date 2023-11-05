@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HistoricalRecords } from '../reports/historical-records/historical-records.entity';
+import { HistoricalRecord } from '../reports/historical-record/historical-record.entity';
 import { generateRandomIP, generateRandomString } from '../helpers/helpers';
 
 @Injectable()
-export class HistoricalRecordsSeederService {
+export class HistoricalRecordSeederService {
   constructor(
-    @InjectRepository(HistoricalRecords)
-    private readonly historicalRecordsRepository: Repository<HistoricalRecords>,
+    @InjectRepository(HistoricalRecord)
+    private readonly historicalRecordRepository: Repository<HistoricalRecord>,
   ) {}
 
   async seedMultipleReports(times: number): Promise<void> {
@@ -19,7 +19,7 @@ export class HistoricalRecordsSeederService {
     await Promise.all(promises);
   }
 
-  private async seedSingleReport(): Promise<HistoricalRecords> {
+  private async seedSingleReport(): Promise<HistoricalRecord> {
     const reportData = {
       prefix: generateRandomIP(),
       volume: Math.floor(Math.random() * 100),
@@ -28,9 +28,9 @@ export class HistoricalRecordsSeederService {
       loss_from: Math.floor(Math.random() * 1000),
       latency_to: Math.floor(Math.random() * 1000),
       latency_from: Math.floor(Math.random() * 1000),
-      type: generateRandomString(10).toUpperCase(),
+      type: generateRandomString(80),
     };
 
-    return this.historicalRecordsRepository.save(reportData);
+    return this.historicalRecordRepository.save(reportData);
   }
 }

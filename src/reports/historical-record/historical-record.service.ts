@@ -1,32 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { HistoricalRecord } from './historical-record.entity';
 import { Repository } from 'typeorm';
-import { AsNumber } from './as-number.entity';
 import { PaginationResults } from './types/pagination-results.interface';
 
 @Injectable()
-export class AsNumberService {
+export class HistoricalRecordService {
   constructor(
-    @InjectRepository(AsNumber)
-    private reportsRepository: Repository<AsNumber>,
+    @InjectRepository(HistoricalRecord)
+    private historicalRecordRepository: Repository<HistoricalRecord>,
   ) {}
 
   async getReports(
     page = 1,
     pageSize = 10,
-    asName?: string,
-    asn?: string,
-  ): Promise<PaginationResults<AsNumber>> {
-    const queryBuilder = this.reportsRepository.createQueryBuilder('as_number');
+    prefix: string,
+  ): Promise<PaginationResults<HistoricalRecord>> {
+    const queryBuilder =
+      this.historicalRecordRepository.createQueryBuilder('historical_record');
 
-    if (asName) {
-      queryBuilder.andWhere('report.as_name ILIKE :asName', {
-        asName: `%${asName}%`,
+    if (prefix) {
+      queryBuilder.andWhere('historical_record.prefix ILIKE :prefix', {
+        prefix: `%${prefix}%`,
       });
-    }
-
-    if (asn) {
-      queryBuilder.andWhere('report.asn = :asn', { asn });
     }
 
     queryBuilder.take(pageSize);

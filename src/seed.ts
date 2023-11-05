@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SeederModule } from './seed/seeder.module';
 import { AsNumberSeederService } from './seed/as-number.seeder.service';
 import { TimelineGraphSeederService } from './seed/timeline-graph.seeder.service';
-import { HistoricalRecordsSeederService } from './seed/historical-records.seeder.service';
+import { HistoricalRecordSeederService } from './seed/historical-record.seeder.service';
 
 async function seed(): Promise<void> {
   const appContext = await NestFactory.createApplicationContext(SeederModule);
@@ -17,7 +17,7 @@ async function seed(): Promise<void> {
     console.log('Timeline Graph Seeding complete!');
 
     const historicalRecordsSeeder = appContext.get(
-      HistoricalRecordsSeederService,
+      HistoricalRecordSeederService,
     );
     await historicalRecordsSeeder.seedMultipleReports(10);
     console.log('Historical Records Seeding complete!');

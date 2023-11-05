@@ -4,8 +4,8 @@ import { AsNumber } from '../reports/as-number/as-number.entity';
 import { TimeLine } from '../graphs/timeline/timeline.entity';
 import { AsNumberSeederService } from './as-number.seeder.service';
 import { TimelineGraphSeederService } from './timeline-graph.seeder.service';
-import { HistoricalRecordsSeederService } from './historical-records.seeder.service';
-import { HistoricalRecords } from '../reports/historical-records/historical-records.entity';
+import { HistoricalRecordSeederService } from './historical-record.seeder.service';
+import { HistoricalRecord } from '../reports/historical-record/historical-record.entity';
 
 @Module({
   imports: [
@@ -16,18 +16,18 @@ import { HistoricalRecords } from '../reports/historical-records/historical-reco
       username: 'bqyopfin',
       password: 'IpmZ4a2VEnBnsv_PKhL5KnGGcjqejSRc',
       database: 'bqyopfin',
-      entities: [AsNumber, TimeLine, HistoricalRecords],
+      entities: [AsNumber, TimeLine, HistoricalRecord],
       synchronize: true,
       extra: {
         max: 1,
       },
     }),
-    TypeOrmModule.forFeature([AsNumber, TimeLine, HistoricalRecords]),
+    TypeOrmModule.forFeature([AsNumber, TimeLine, HistoricalRecord]),
   ],
   providers: [
     AsNumberSeederService,
     TimelineGraphSeederService,
-    HistoricalRecordsSeederService,
+    HistoricalRecordSeederService,
   ],
 })
 export class SeederModule {}
