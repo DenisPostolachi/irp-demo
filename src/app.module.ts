@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AsNumberModule } from './reports/as-number/as-number.module';
 import { SeederModule } from './seed/seeder.module';
 import { TimeLineModule } from './graphs/timeline/timeline.module';
+import { HistoricalRecordsModule } from './reports/historical-records/historical-records.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TimeLineModule } from './graphs/timeline/timeline.module';
     AsNumberModule,
     TimeLineModule,
     SeederModule,
+    HistoricalRecordsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

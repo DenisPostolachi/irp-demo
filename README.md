@@ -1,5 +1,5 @@
 # Nest.js + PostgreSQL Project for Data Reporting
-This is a Nest.js backend project developed specifically for interns. It utilizes PostgreSQL for data storage and provides a set of RESTful endpoints to access and manipulate data used for generating graphs and reports.
+This is a Nest.js project developed specifically for interns. It utilizes PostgreSQL for data storage and provides a set of RESTful endpoints to access and manipulate data used for generating graphs and reports.
 
 ## Project Overview
 

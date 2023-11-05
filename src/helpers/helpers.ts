@@ -10,3 +10,19 @@ export function generateRandomString(length: number): string {
 
   return result;
 }
+
+export function generateRandomIP() {
+  function randomIPv4() {
+    return Array.from(Array(4))
+      .map(() => Math.floor(Math.random() * 256))
+      .join('.');
+  }
+
+  function randomIPv6() {
+    return Array.from(Array(8))
+      .map(() => Math.floor(Math.random() * 65536).toString(16))
+      .join(':');
+  }
+
+  return Math.random() < 0.5 ? randomIPv4() : randomIPv6();
+}
