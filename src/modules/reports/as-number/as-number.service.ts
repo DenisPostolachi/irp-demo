@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AsNumber } from './as-number.entity';
-import { PaginationResults } from './types/pagination-results.interface';
+import { AsNumberParamsDto } from './dto/as-number-params.dto';
 
 @Injectable()
 export class AsNumberService {
@@ -11,13 +11,18 @@ export class AsNumberService {
     private reportsRepository: Repository<AsNumber>,
   ) {}
 
-  async getReports(
-    page = 1,
-    pageSize = 10,
-    asName?: string,
-    asn?: string,
-    sortOrder: 'ASC' | 'DESC' = 'ASC',
-  ): Promise<PaginationResults<AsNumber>> {
+  async getAsNumberData(asNumberParamsDto: AsNumberParamsDto) {
+    try {
+      const queryBuilder = this.createQueryBuilder(asNumberParamsDto);
+      const [results, total] = await queryBuilder.getManyAndCount();
+      return this.formatPaginationResults(results, total, asNumberParamsDto);
+    } catch (error) {
+      throw new Error('Error fetching AS number data');
+    }
+  }
+
+  private createQueryBuilder(params: AsNumberParamsDto) {
+    const { asName, asn, sortOrder, page, pageSize } = params;
     const queryBuilder = this.reportsRepository.createQueryBuilder('as_number');
 
     if (asName) {
@@ -31,15 +36,21 @@ export class AsNumberService {
     }
 
     queryBuilder.orderBy('as_number.created_at', sortOrder);
-
     queryBuilder.take(pageSize);
     queryBuilder.skip((page - 1) * pageSize);
 
-    const [results, total] = await queryBuilder.getManyAndCount();
+    return queryBuilder;
+  }
 
+  private formatPaginationResults(
+    results: AsNumber[],
+    total: number,
+    params: AsNumberParamsDto,
+  ) {
+    const { page, pageSize } = params;
     return {
-      data: [results],
-      headers: Object.keys(results[0]),
+      data: results,
+      headers: results.length > 0 ? Object.keys(results[0]) : [],
       count: total,
       currentPage: page,
       nextPage: total > page * pageSize ? page + 1 : null,

@@ -15,7 +15,15 @@ export class HistoricalRecordService {
     page = 1,
     pageSize = 10,
     prefix: string,
-  ): Promise<PaginationResults<HistoricalRecord>> {
+  ): Promise<{
+    headers: string[];
+    data: HistoricalRecord[][];
+    lastPage: number;
+    nextPage: number;
+    count: number;
+    prevPage: number;
+    currentPage: number
+  }> {
     const queryBuilder =
       this.historicalRecordRepository.createQueryBuilder('historical_record');
 

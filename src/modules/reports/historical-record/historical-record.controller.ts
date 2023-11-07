@@ -14,7 +14,15 @@ export class HistoricalRecordController {
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
     @Query('prefix') prefix: string,
-  ): Promise<PaginationResults<HistoricalRecord>> {
+  ): Promise<{
+    headers: string[];
+    data: HistoricalRecord[][];
+    lastPage: number;
+    nextPage: number;
+    count: number;
+    prevPage: number;
+    currentPage: number;
+  }> {
     return this.historicalRecordsService.getReports(page, pageSize, prefix);
   }
 }
