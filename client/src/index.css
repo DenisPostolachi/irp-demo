@@ -1,3 +1,10 @@
 @import 'assets/fonts/fonts.css';
 @import 'assets/tailwind/tailwind.css';
+@import 'assets/vendor/normalize.css';
 
+body {
+  margin: 0 auto;
+  padding: 100px 20px 0 90px;
+  width: auto;
+  font-family: 'Open Sans', serif;
+}

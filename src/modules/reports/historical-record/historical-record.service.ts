@@ -17,7 +17,7 @@ export class HistoricalRecordService {
     prefix: string,
   ): Promise<{
     headers: string[];
-    data: HistoricalRecord[][];
+    data: HistoricalRecord[];
     lastPage: number;
     nextPage: number;
     count: number;
@@ -39,7 +39,7 @@ export class HistoricalRecordService {
     const [results, total] = await queryBuilder.getManyAndCount();
 
     return {
-      data: [results],
+      data: results,
       headers: Object.keys(results[0]),
       count: total,
       currentPage: page,

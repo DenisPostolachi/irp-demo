@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import DashboardViews from '@/views/dashboard/DashboardViews.vue';
-import ReportsViews from '@/views/reports/ReportsViews.vue';
-import ReportViews from '@/views/reports/report/ReportViews.vue';
+import ReportsViews from '@/views/reports/ReportsList.vue';
+import ReportViews from '@/views/reports/report/Report.vue';
 
 Vue.use(VueRouter);
 
@@ -18,8 +18,13 @@ const routes = [
     component: ReportsViews,
   },
   {
-    path: '/report/:id',
-    name: 'reportItem',
+    path: '/reports/asnumber',
+    name: 'As Number',
+    component: ReportViews,
+  },
+  {
+    path: '/reports/historical-record',
+    name: 'Historical Records',
     component: ReportViews,
   },
 ];

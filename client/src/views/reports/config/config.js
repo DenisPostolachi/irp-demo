@@ -2,10 +2,12 @@ const reports = [
   {
     id: 1,
     name: 'ASN Statistics',
+    slug: 'reports/asnumber',
   },
   {
     id: 2,
-    name: 'ASN Traffic Percentage',
+    name: 'Historical Record',
+    slug: 'reports/historical-record',
   },
 ];
 

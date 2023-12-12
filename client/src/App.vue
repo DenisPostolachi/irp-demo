@@ -24,12 +24,3 @@ export default {
   },
 };
 </script>
-
-<style>
-body {
-  margin: 0 auto;
-  padding: 100px;
-  width: auto;
-  font-family: Roboto-Regular, serif;
-}
-</style>

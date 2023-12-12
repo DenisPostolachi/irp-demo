@@ -16,7 +16,7 @@ export class HistoricalRecordController {
     @Query('prefix') prefix: string,
   ): Promise<{
     headers: string[];
-    data: HistoricalRecord[][];
+    data: HistoricalRecord[];
     lastPage: number;
     nextPage: number;
     count: number;
