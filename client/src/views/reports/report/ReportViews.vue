@@ -2,7 +2,7 @@
   <div>
     <div class="flex justify-between">
       <div class="flex justify-between w-fit items-center">
-        <p>Reports</p>
+        <p class="cursor-pointer" @click="backRoute">Reports</p>
         <img
           alt="arrow"
           src="../../../assets/img/down-arrow.svg"
@@ -36,69 +36,145 @@
       </div>
     </div>
     <div class="flex flex-col shadow-2xl">
-      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div class="overflow-hidden">
-            <table class="min-w-full text-left text-sm font-light">
-              <thead class="border-b font-medium dark:border-neutral-500">
-                <tr>
-                  <th scope="col" class="px-6 py-4">#</th>
-                  <th scope="col" class="px-6 py-4">First</th>
-                  <th scope="col" class="px-6 py-4">Last</th>
-                  <th scope="col" class="px-6 py-4">Handle</th>
-                  <th scope="col" class="px-6 py-4">#</th>
-                  <th scope="col" class="px-6 py-4">First</th>
-                  <th scope="col" class="px-6 py-4">Last</th>
-                  <th scope="col" class="px-6 py-4">Handle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#fff2e5]"
+      <div class="inline-block min-w-full">
+        <div class="overflow-hidden">
+          <table class="min-w-full text-left text-sm font-light">
+            <thead class="border-b font-medium dark:border-neutral-500">
+              <tr>
+                <th
+                  v-for="(header, key) in formattedHeaders"
+                  :key="key"
+                  scope="col"
+                  class="px-6 py-4"
                 >
-                  <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                  <td class="whitespace-nowrap px-6 py-4">Mark</td>
-                  <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                  <td class="whitespace-nowrap px-6 py-4">@mdo</td>
-                  <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                  <td class="whitespace-nowrap px-6 py-4">Mark</td>
-                  <td class="whitespace-nowrap px-6 py-4">Otto</td>
-                  <td class="whitespace-nowrap px-6 py-4">@mdo</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                  {{ header }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                :class="{
+                  'bg-white': index % 2 !== 0,
+                  'bg-gray-50': index % 2 === 0,
+                }"
+                v-for="(data, index) in dataTable.data"
+                :key="data.id"
+                class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-[#fff2e5]"
+              >
+                <td class="whitespace-nowrap px-6 py-4 font-medium">
+                  {{ data.id }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.as_name }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.volume }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.asn }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.improvements }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.inbound }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.outbound }}
+                </td>
+                <td class="whitespace-nowrap px-6 py-4">
+                  {{ data.created_at }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-    <div v-for="item in data" :key="item.id">
-      {{ item.headers }}
-    </div>
+
+    <nav class="flex justify-center mt-5">
+      <ul class="list-style-none flex">
+        <li>
+          <a
+            class="relative block rounded px-3 py-1.5 text-sm text-black hover:bg-[#e9e9e9]"
+            >Previous</a
+          >
+        </li>
+        <li>
+          <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-[#e9e9e9] dark:hover:bg-[#e9e9e9]"
+            >1</a
+          >
+        </li>
+        <li aria-current="page">
+          <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-[#e9e9e9] dark:hover:bg-[#e9e9e9]"
+            >2
+            <span
+              class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]"
+              >(current)</span
+            >
+          </a>
+        </li>
+        <li>
+          <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-[#e9e9e9] dark:hover:bg-[#e9e9e9]"
+            >3</a
+          >
+        </li>
+        <li>
+          <a
+            class="relative block rounded bg-transparent px-3 py-1.5 text-sm text-black transition-all duration-300 hover:bg-[#e9e9e9] dark:hover:bg-[#e9e9e9]"
+            >Next</a
+          >
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script>
-// import axios from 'axios';
+import { getDataTable } from '@/service/reportServices/api';
 
 export default {
   data() {
     return {
       showDetails: false,
-      data: [],
+      dataTable: { headers: [] },
     };
   },
   methods: {
     toggleDetails() {
       this.showDetails = !this.showDetails;
     },
+    formatHeaders(headers) {
+      return headers.map((header) => {
+        return header
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase());
+      });
+    },
+    backRoute() {
+      this.$router.go(-1);
+    },
   },
-  // mounted() {
-  //   axios
-  //     .get('http://localhost:3000/reports/asnumber?page=1&pageSize=50')
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     });
-  // },
+
+  computed: {
+    formattedHeaders() {
+      return this.dataTable.headers;
+    },
+  },
+
+  mounted() {
+    getDataTable
+      .then((data) => {
+        this.dataTable = data;
+        this.dataTable.headers = this.formatHeaders(this.dataTable.headers);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  },
 };
 </script>
 
