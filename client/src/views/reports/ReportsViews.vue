@@ -10,7 +10,7 @@
               :to="{ name: 'reportItem', params: { id: report.id } }"
             >
               <div
-                class="flex justify-between bg-white drop-shadow-xl mb-3 mt-3 items-center h-[60px] cursor-pointer"
+                class="flex justify-between bg-white drop-shadow-xl mb-3 mt-3 p-4 items-center h-[60px] cursor-pointer"
                 @mouseover="hoveredReport = report.id"
                 @mouseleave="hoveredReport = null"
               >
@@ -56,7 +56,7 @@
         <div>
           <h3 class="text-4xl">Graphs</h3>
           <div
-            class="flex justify-between bg-white drop-shadow-xl mb-3 mt-3 items-center h-[60px] cursor-pointer"
+            class="flex justify-between bg-white drop-shadow-xl mb-3 mt-3 p-4 items-center h-[60px] cursor-pointer"
             v-for="graph in graphs"
             :key="graph.id"
             @mouseover="hovered = graph.id"
