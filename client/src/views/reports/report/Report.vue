@@ -6,7 +6,7 @@
     <pagination-table
       @change="changePage"
       :totalPages="totalPages"
-      :page="page"
+      :page="reportFilters.page"
       @prevPage="prevPage"
       @nextPage="nextPage"
     />
@@ -19,6 +19,7 @@ import PaginationTable from '@/components/pagination/PaginationTable.vue';
 import ReportHeader from '@/views/reports/components/ReportHeader.vue';
 import ReportTable from '@/views/reports/components/ReportTable.vue';
 import ReportInfo from '@/views/reports/components/ReportInfo.vue';
+import store from '@/store';
 export default {
   name: 'ReportView',
   components: {
@@ -35,35 +36,40 @@ export default {
       totalPages: 0,
     };
   },
+  computed: {
+    reportFilters() {
+      return store.getters.reportFilters;
+    },
+  },
   created() {
     this.fetchData();
+  },
+  watch: {
+    reportFilters() {
+      this.fetchData();
+    },
   },
   methods: {
     async fetchData() {
       try {
-        this.report = await getReport(
-          this.$route.path,
-          this.page,
-          this.pageSize,
-        );
+        this.report = await getReport(this.$route.path, this.reportFilters);
         this.totalPages = Math.ceil(this.report.count / this.pageSize);
       } catch (error) {
         console.error(error);
       }
     },
-    changePage(page) {
-      this.page = page;
-      this.fetchData();
+    changePage(value) {
+      store.commit('applyFilters', { page: value });
     },
     prevPage() {
-      if (this.page > 1) {
-        this.page--;
+      if (store.state.filters.page > 1) {
+        store.state.filters.page--;
         this.fetchData();
       }
     },
     nextPage() {
-      if (this.page < this.totalPages) {
-        this.page++;
+      if (store.state.filters.page < this.totalPages) {
+        store.state.filters.page++;
         this.fetchData();
       }
     },
