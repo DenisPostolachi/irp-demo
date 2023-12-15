@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     filters: {
       page: 1,
-      pageSize: 10,
+      pageSize: 5,
     },
   },
   getters: {
@@ -17,6 +17,9 @@ export default new Vuex.Store({
   mutations: {
     applyFilters: (state, results) => {
       state.filters = { ...state.filters, ...results };
+    },
+    resetFilters: (state) => {
+      state.filters = { page: 1, pageSize: 10 };
     },
   },
   actions: {},

@@ -63,26 +63,17 @@
 
 <script>
 export default {
-  data() {
-    return {
-      filters: {
-        page: 1,
-        pageSize: 10,
-      },
-    };
+  computed: {
+    filters() {
+      return this.$store.getters.reportFilters;
+    },
   },
   methods: {
     submit() {
       this.$store.commit('applyFilters', this.filters);
     },
     resetFilter() {
-      this.$store.commit(
-        'applyFilters',
-        (this.filters.page = 1),
-        (this.filters.pageSize = 10),
-        (this.filters.asName = ''),
-      );
-      this.submit();
+      this.$store.commit('resetFilters');
     },
   },
 };
