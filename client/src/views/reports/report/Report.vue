@@ -31,8 +31,7 @@ export default {
   data() {
     return {
       report: { headers: [] },
-      pageSize: 10,
-      page: 1,
+      pagePaginator: 1,
       totalPages: 0,
     };
   },
@@ -53,7 +52,7 @@ export default {
     async fetchData() {
       try {
         this.report = await getReport(this.$route.path, this.reportFilters);
-        this.totalPages = Math.ceil(this.report.count / this.pageSize);
+        this.totalPages = this.report.lastPage;
       } catch (error) {
         console.error(error);
       }
@@ -77,9 +76,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .slide-in-left {
   animation: slideInLeft 0.7s ease forwards;
+  position: relative;
 }
 
 @keyframes slideInLeft {

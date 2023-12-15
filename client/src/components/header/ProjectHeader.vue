@@ -89,7 +89,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .hover-effect:hover img,
 .hover-effect:hover p {
   filter: brightness(150%);

@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .slide-in-from-top {
   opacity: 0;
   transform: translateY(-100px);

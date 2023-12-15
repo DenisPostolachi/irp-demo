@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex justify-center mt-5">
+  <nav class="flex justify-center mt-5 z-10">
     <ul class="list-style-none flex items-center">
       <li>
         <img
