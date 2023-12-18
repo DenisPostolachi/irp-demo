@@ -6,19 +6,19 @@
       <img class="cursor-pointer" alt="logo" src="../../assets/img/logos.svg" />
     </div>
     <div class="flex justify-between items-center">
-      <added-lines class="mr-10" />
+      <added-reports class="mr-20" />
       <drop-down-menu />
     </div>
   </header>
 </template>
 <script>
 import dropDownMenu from '@/components/header/DropDownMenu.vue';
-import addedLines from '@/components/header/AddedLines.vue';
+import addedReports from '@/components/header/AddedReports.vue';
 
 export default {
   components: {
     dropDownMenu,
-    addedLines,
+    addedReports,
   },
 };
 </script>

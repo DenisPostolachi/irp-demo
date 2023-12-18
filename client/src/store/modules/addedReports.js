@@ -21,7 +21,9 @@ const mutations = {
   },
 };
 
-const getters = {};
+const getters = {
+  getInfoReports: (state) => state.infoReports,
+};
 
 export default {
   state,

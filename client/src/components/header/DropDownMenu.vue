@@ -10,7 +10,7 @@
     >
       <div
         v-if="dropdown"
-        class="bg-[#393939] z-10 absolute top-[70px] w-[150px] p-0.2"
+        class="bg-[#393939] z-10 absolute top-[62px] w-[150px] p-0.2"
       >
         <div
           class="shadow-md p-2 items-center"
