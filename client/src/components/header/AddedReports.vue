@@ -62,6 +62,7 @@
 
 <script>
 import vClickOutside from 'v-click-outside';
+import { getFormattedKeys } from '@/helpers/helpers';
 
 export default {
   computed: {
@@ -92,15 +93,7 @@ export default {
       this.$store.commit('removeReportItem', item);
     },
     getFormattedKeys(item) {
-      const formattedKeys = {};
-      for (const [key, value] of Object.entries(item)) {
-        const formattedKey = key
-          .replace(/_/g, ' ')
-          .replace(/\b\w/g, (c) => c.toUpperCase())
-          .replace(/\s+/g, '');
-        formattedKeys[formattedKey] = value;
-      }
-      return formattedKeys;
+      return getFormattedKeys(item);
     },
   },
 };
