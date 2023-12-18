@@ -1,33 +1,3 @@
-<script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'ReportTable',
-  props: {
-    report: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    formattedHeaders() {
-      return this.report.headers.map((header) => {
-        return header
-          .replace(/_/g, ' ')
-          .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase());
-      });
-    },
-  },
-  methods: {
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-      return date.toLocaleDateString('en-GB', options);
-    },
-  },
-});
-</script>
-
 <template>
   <div class="flex flex-col shadow-2xl">
     <div class="inline-block min-w-full">
@@ -60,11 +30,14 @@ export default defineComponent({
                 :key="row.id"
                 class="whitespace-nowrap px-6 py-4 font-medium"
               >
-                {{
-                  Object.keys(data)[index] === 'created_at'
-                    ? formatDate(row)
-                    : row
-                }}
+                {{ rowFormer(row, data, index) }}
+                <button
+                  class="block"
+                  v-if="Object.values(data).length - 1 === index"
+                  @click="addReport(data)"
+                >
+                  <img alt="eye-open" src="../../../assets/img/eye-open.svg" />
+                </button>
               </td>
             </tr>
           </tbody>
@@ -74,4 +47,40 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped></style>
+<script>
+import { defineComponent } from 'vue';
+import store from '@/store';
+export default defineComponent({
+  name: 'ReportTable',
+  props: {
+    report: {
+      type: Object,
+      required: true,
+    },
+  },
+  computed: {
+    formattedHeaders() {
+      return this.report.headers.map((header) => {
+        return header
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, (firstChar) => firstChar.toUpperCase());
+      });
+    },
+  },
+  methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+      return date.toLocaleDateString('en-GB', options);
+    },
+    addReport(data) {
+      store.commit('addReportItem', data);
+    },
+    rowFormer(row, data, index) {
+      return Object.keys(data)[index] === 'created_at'
+        ? this.formatDate(row)
+        : row;
+    },
+  },
+});
+</script>

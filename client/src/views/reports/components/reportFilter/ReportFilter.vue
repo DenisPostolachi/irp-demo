@@ -13,7 +13,7 @@
           <div>
             <p class="pl-2 mb-3">AS name</p>
             <input
-              v-model="filters.asName"
+              v-model="filterValues.asName"
               placeholder="Any As name"
               type="text"
               class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
@@ -22,7 +22,7 @@
           <div>
             <p class="pl-2 mb-3">Page</p>
             <input
-              v-model="filters.page"
+              v-model="filterValues.page"
               placeholder="Page"
               type="text"
               class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
@@ -31,7 +31,7 @@
           <div>
             <p class="pl-2 mb-3">Number of records</p>
             <input
-              v-model="filters.pageSize"
+              v-model="filterValues.pageSize"
               type="text"
               class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
             />
@@ -46,10 +46,7 @@
               reset
             </button>
             <button
-              @click="
-                submit();
-                $emit('toHideFilter');
-              "
+              @click="submit"
               class="bg-[#ff8400] hover:bg-[#e67700] p-2 rounded-2xl text-white font-bold text-xs w-[80px] uppercase"
             >
               apply
@@ -63,17 +60,26 @@
 
 <script>
 export default {
+  data: () => ({
+    filterValues: {},
+  }),
   computed: {
-    filters() {
+    savedFilters() {
       return this.$store.getters.reportFilters;
     },
   },
+  mounted() {
+    this.filterValues = { ...this.savedFilters };
+  },
   methods: {
     submit() {
-      this.$store.commit('applyFilters', this.filters);
+      this.$emit('toHideFilter');
+      this.$store.commit('applyFilters', this.filterValues);
     },
     resetFilter() {
+      this.$emit('toHideFilter');
       this.$store.commit('resetFilters');
+      this.filterValues = { ...this.savedFilters };
     },
   },
 };
