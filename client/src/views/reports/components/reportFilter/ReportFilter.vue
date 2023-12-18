@@ -102,7 +102,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 80vh;
+  height: 60vh;
 }
 @keyframes fadeIn {
   from {

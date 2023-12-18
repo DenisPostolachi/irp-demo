@@ -20,7 +20,8 @@
         <div
           v-for="(day, index) in prevMonthDays"
           :key="index"
-          class="w-6 h-6 flex items-center justify-center m-1 hover:bg-[#e9e9e9] rounded-xl cursor-pointer"
+          class="day-cell"
+          @click="selectDay(day)"
         >
           {{ day }}
         </div>
@@ -32,6 +33,7 @@
           {{ formattedCurrentMonth }}
         </h2>
         <button
+          :disabled="!!isCurrentMonth()"
           class="ml-4 hover:bg-[#e9e9e9] p-1 rounded-lg"
           @click="navigate('next')"
         >
@@ -46,7 +48,11 @@
         <div
           v-for="(day, index) in currentMonthDays"
           :key="index"
-          class="w-6 h-6 flex items-center justify-center m-1 hover:bg-[#e9e9e9] rounded-xl cursor-pointer"
+          :class="[
+            'day-cell',
+            { 'text-gray-400 cursor-not-allowed': isDisabled(day) },
+          ]"
+          @click="selectDay(day)"
         >
           {{ day }}
         </div>
@@ -102,6 +108,41 @@ export default {
       newDate.setMonth(newDate.getMonth() + modifier);
       this.currentDate = newDate;
     },
+    isDisabled(day) {
+      const today = new Date();
+      return (
+        this.currentDate.getMonth() === today.getMonth() &&
+        day > today.getDate()
+      );
+    },
+    selectDay(day) {
+      if (!this.isDisabled(day)) {
+        console.log(`Selected day: ${day} of ${this.formattedPrevMonth}`);
+      }
+    },
+    isCurrentMonth() {
+      const today = new Date();
+      return (
+        this.currentDate.getMonth() === today.getMonth() &&
+        this.currentDate.getFullYear() === today.getFullYear()
+      );
+    },
   },
 };
 </script>
+
+<style scoped>
+.day-cell {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+.day-cell:hover {
+  background-color: #e9e9e9;
+}
+</style>
