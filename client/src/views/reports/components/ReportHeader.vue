@@ -15,7 +15,7 @@
           @click.prevent="toggleFilter"
           class="flex bg-[#e9e9e9] rounded-[36px] h-[36px] p-3 cursor-pointer items-center text-l"
         >
-          Last Month
+          Filters
           <img class="ml-1" alt="filter" src="../../../assets/img/filter.svg" />
         </button>
       </div>
@@ -70,5 +70,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
