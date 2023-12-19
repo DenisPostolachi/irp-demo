@@ -21,7 +21,7 @@
           v-for="(day, index) in prevMonthDays"
           :key="index"
           class="day-cell"
-          @click="selectDay(day)"
+          @click="selectPrevDay(day)"
         >
           {{ day }}
         </div>
@@ -52,7 +52,7 @@
             'day-cell',
             { 'text-gray-400 cursor-not-allowed': isDisabled(day) },
           ]"
-          @click="selectDay(day)"
+          @click="selectCurrentDay(day)"
         >
           {{ day }}
         </div>
@@ -115,9 +115,60 @@ export default {
         day > today.getDate()
       );
     },
-    selectDay(day) {
+    selectPrevDay(day) {
+      this.handlePrevDaySelection(day);
+    },
+    selectCurrentDay(day) {
       if (!this.isDisabled(day)) {
-        console.log(`Selected day: ${day} of ${this.formattedPrevMonth}`);
+        this.handleCurrentDaySelection(day);
+      }
+    },
+    handlePrevDaySelection(day) {
+      if (!this.startDatePrevMonth) {
+        this.startDatePrevMonth = day;
+        this.endDatePrevMonth = null;
+      } else if (!this.endDatePrevMonth) {
+        if (day > this.startDatePrevMonth) {
+          this.endDatePrevMonth = day;
+          console.log(
+            `Selected range 1 : ${this.startDatePrevMonth} to ${this.endDatePrevMonth}`,
+          );
+        } else {
+          this.endDatePrevMonth = this.startDatePrevMonth;
+          this.startDatePrevMonth = day;
+          console.log(
+            `Selected range 2: ${this.startDatePrevMonth} to ${this.endDatePrevMonth}`,
+          );
+        }
+      } else {
+        this.startDatePrevMonth = day;
+        console.log(
+          `Selected range 3: ${this.startDatePrevMonth} to ${this.endDatePrevMonth}`,
+        );
+      }
+    },
+    handleCurrentDaySelection(day) {
+      if (!this.startDateCurrMonth) {
+        this.startDateCurrMonth = day;
+        this.endDateCurrMonth = null;
+      } else if (!this.endDateCurrMonth) {
+        if (day > this.startDateCurrMonth) {
+          this.selectedEndDate = day;
+          console.log(
+            `Selected range 1 : ${this.startDateCurrMonth} to ${this.selectedEndDate}`,
+          );
+        } else {
+          this.selectedEndDate = this.startDateCurrMonth;
+          this.startDateCurrMonth = day;
+          console.log(
+            `Selected range 2: ${this.startDateCurrMonth} to ${this.selectedEndDate}`,
+          );
+        }
+      } else {
+        this.startDateCurrMonth = day;
+        console.log(
+          `Selected range 3: ${this.startDateCurrMonth} to ${this.selectedEndDate}`,
+        );
       }
     },
     isCurrentMonth() {
