@@ -86,6 +86,9 @@
         </div>
       </div>
     </div>
+    <button class="bg-black w-[100px] h-[100px]" @click="consoleDate">
+      Console
+    </button>
   </div>
 </template>
 
@@ -186,7 +189,6 @@ export default {
           ? this.minDate
           : this.minDate.getTime();
       this.selectMinDate = new Date(minDateValue);
-      console.log('this SelectMinDate:', this.selectMinDate);
     }
     if (this.maxDate) {
       const maxDateValue =
@@ -194,7 +196,6 @@ export default {
           ? this.maxDate
           : this.maxDate.getTime();
       this.selectMaxDate = new Date(maxDateValue);
-      console.log('this SelectMaxDate:', this.selectMaxDate);
     }
     if (this.startDate) {
       const startDateValue =
@@ -218,7 +219,6 @@ export default {
             ? this.endDate
             : this.endDate.getTime();
         this.selectEndDate = new Date(endDateValue);
-        console.log('this EndDate:', this.endDate);
       }
 
       this.updateValue();
@@ -226,15 +226,32 @@ export default {
     this.updateCalendar(); // after setting
   },
 
-  watch: {
-    value: {
-      immediate: true,
-      handler(dates) {
-        if (!dates) return;
-        // this.valueStartDate = dates.start;
-        // this.valueEndDate = dates.end;
-      },
+  computed: {
+    consoleDate() {
+      console.log('this valueStartDate:', this.valueStartDate);
+      console.log('this valueEndDate:', this.valueEndDate);
+      console.log('this startMonthDate:', this.startMonthDate);
+      console.log('this endMonthDate:', this.endMonthDate);
+      console.log('this selectStartDate:', this.selectStartDate);
+      console.log('this selectEndDate:', this.selectEndDate);
+      console.log('this selectMinDate:', this.selectMinDate);
+      console.log('this selectMaxDate:', this.selectMaxDate);
+      console.log('this startMonthAry:', this.startMonthAry);
+      console.log('this endMonthAry:', this.endMonthAry);
+      console.log('this clickCount:', this.clickCount);
+      console.log('this selectStartDate:', this.selectStartDate);
+      return false;
     },
+  },
+  watch: {
+    // value: {
+    // immediate: true,
+    // handler(dates) {
+    // if (!dates) return;
+    // this.valueStartDate = dates.start;
+    // this.valueEndDate = dates.end;
+    // },
+    // },
   },
 
   methods: {
