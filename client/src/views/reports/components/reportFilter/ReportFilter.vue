@@ -8,7 +8,7 @@
       class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-50 w-[640px] pt-[60px] pl-3 pr-3"
     >
       <h4 class="text-lg font-medium mb-10">Filters</h4>
-      <report-calendar />
+      <report-calendar :value="filterValues.dates" @click="test" />
       <div class="wrapper">
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -86,6 +86,12 @@ export default {
       this.$store.commit('resetFilters');
       this.filterValues = { ...this.savedFilters };
     },
+    test(value) {
+      this.filterValues = {
+        ...this.filterValues,
+        dates: { start: value.start, end: value.end },
+      };
+    },
   },
 };
 </script>
@@ -102,7 +108,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 60vh;
+  height: 40vh;
 }
 @keyframes fadeIn {
   from {
