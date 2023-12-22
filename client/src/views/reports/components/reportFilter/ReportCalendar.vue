@@ -186,6 +186,7 @@ export default {
           ? this.minDate
           : this.minDate.getTime();
       this.selectMinDate = new Date(minDateValue);
+      console.log('this SelectMinDate:', this.selectMinDate);
     }
     if (this.maxDate) {
       const maxDateValue =
@@ -193,6 +194,7 @@ export default {
           ? this.maxDate
           : this.maxDate.getTime();
       this.selectMaxDate = new Date(maxDateValue);
+      console.log('this SelectMaxDate:', this.selectMaxDate);
     }
     if (this.startDate) {
       const startDateValue =
@@ -216,6 +218,7 @@ export default {
             ? this.endDate
             : this.endDate.getTime();
         this.selectEndDate = new Date(endDateValue);
+        console.log('this EndDate:', this.endDate);
       }
 
       this.updateValue();
