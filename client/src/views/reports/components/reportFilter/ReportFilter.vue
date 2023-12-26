@@ -8,8 +8,7 @@
       class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-50 w-[640px] pt-[60px] pl-3 pr-3"
     >
       <h4 class="text-lg font-medium mb-10">Filters</h4>
-      {{ filterValues }}
-      <report-calendar :value="filterValues.dates" @click="test" />
+      <report-calendar :value="filterValues.dates" @click="obgFilters" />
       <div class="wrapper">
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -62,18 +61,14 @@
 
 <script>
 import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalendar.vue';
-let currentDate = new Date();
-let yesterdayDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
+
 export default {
   components: {
     ReportCalendar,
   },
   data: () => ({
     filterValues: {
-      dates: {
-        start: yesterdayDate,
-        end: currentDate,
-      },
+      dates: {},
     },
   }),
   computed: {
@@ -94,7 +89,7 @@ export default {
       this.$store.commit('resetFilters');
       this.filterValues = { ...this.savedFilters };
     },
-    test(value) {
+    obgFilters(value) {
       this.filterValues = {
         ...this.filterValues,
         dates: { start: value.start, end: value.end },

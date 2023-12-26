@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--    {{ this.value }}-->
     <div class="flex justify-between">
       <input
         v-model="valueStartDate"
@@ -27,7 +26,7 @@
             />
           </button>
           <h2 class="text-center text-lg text-[#808080] font-bold">
-            {{ monthList[startMonthDate.getMonth()] }}
+            {{ allMonthList[startMonthDate.getMonth()] }}
             {{ startMonthDate.getFullYear() }}
           </h2>
         </div>
@@ -54,7 +53,7 @@
       <div class="w-[50%] h-[284px]">
         <div class="flex items-center justify-end mb-4 pr-12">
           <h2 class="text-center text-lg text-[#808080] font-bold">
-            {{ monthList[endMonthDate.getMonth()] }}
+            {{ allMonthList[endMonthDate.getMonth()] }}
             {{ endMonthDate.getFullYear() }}
           </h2>
           <button
@@ -90,6 +89,8 @@
 </template>
 
 <script>
+import { monthList } from '@/views/reports/components/reportFilter/config';
+
 export default {
   props: {
     format: {
@@ -112,44 +113,18 @@ export default {
       type: Object,
       default: () => {},
     },
-
-    monthList: {
-      type: Array,
-      default: () => [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ],
-    },
   },
   data() {
-    let currentDate = new Date();
-    let yesterdayDate = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
-
     return {
-      valueStartDate: new Date().toUTCString(),
-      valueEndDate: yesterdayDate.toUTCString(),
-      active: false,
+      valueStartDate: null,
+      valueEndDate: null,
       startMonthDate: null,
       endMonthDate: null,
-      selectStartDate: null,
-      selectEndDate: null,
       selectMinDate: null,
-      selectMaxDate: null,
       startMonthAry: [],
       endMonthAry: [],
       clickCount: 0,
-      hoveredDay: null,
-      selectForward: true,
+      allMonthList: monthList,
     };
   },
   created() {
@@ -163,46 +138,20 @@ export default {
 
     this.updateCalendar();
   },
-
-  computed: {},
   watch: {
-    // value: {
-    // immediate: true,
-    // handler(dates) {
-    // if (!dates) return;
-    // this.valueStartDate = dates.start;
-    // this.valueEndDate = dates.end;
-    // },
-    // },
-  },
-
-  methods: {
-    // reset() {
-    //   this.selectStartDate = null;
-    //   this.selectEndDate = null;
-    //   this.valueStartDate = '';
-    //   this.valueEndDate = '';
-    //   this.$emit('reset');
-    // },
-    displayDateText(datetime) {
-      if (datetime) {
-        datetime = typeof datetime === 'string' ? new Date(datetime) : datetime;
-
-        const yyyy = datetime.getFullYear();
-        const mm =
-          datetime.getMonth() + 1 > 9
-            ? datetime.getMonth() + 1
-            : `0${datetime.getMonth() + 1}`;
-        const dd =
-          datetime.getDate() > 9
-            ? datetime.getDate()
-            : `0${datetime.getDate()}`;
-        return (this.format || 'YYYY/MM/DD')
-          .replace('YYYY', yyyy)
-          .replace('MM', mm)
-          .replace('DD', dd);
-      }
+    value: {
+      immediate: true,
+      handler(dates) {
+        if (!dates) return;
+        this.valueStartDate = dates.start;
+        this.valueEndDate = dates.start;
+        if (this.valueEndDate === dates.start) {
+          this.valueEndDate = dates.end;
+        }
+      },
     },
+  },
+  methods: {
     generateCalendar(
       calculateYear = new Date().getFullYear(),
       calculateMonth = new Date().getMonth(),
@@ -223,24 +172,20 @@ export default {
         let day = countTime.getDay();
         let date = countTime.getDate();
         let month = countTime.getMonth();
-        // check next month
         if (month !== calculateMonth) {
           nextMonth = true;
           if (day === 6 || (date === 1 && day === 0)) {
             completed = true;
           }
         }
-        // Set date
         if (!nextMonth) {
-          tempWeekAry[day] = new Date(countTime.getTime()); // date obj
+          tempWeekAry[day] = new Date(countTime.getTime());
         } else {
           tempWeekAry[day] = showNextMonthDate
             ? new Date(countTime.getTime())
             : false;
         }
-        // check previous
         if (countTime.getTime() === baseDateTime.getTime() && day !== 0) {
-          // Fill previous
           let previousDay = day;
           let previousCountTime = new Date(countTime.getTime());
           previousCountTime.setDate(previousCountTime.getDate());
@@ -248,42 +193,34 @@ export default {
             while (previousDay !== 0) {
               let previousDateTime = new Date(previousCountTime.getTime());
               previousDay = previousDateTime.getDay();
-              tempWeekAry[previousDay] = previousDateTime; // date obj
+              tempWeekAry[previousDay] = previousDateTime;
               previousCountTime.setDate(previousCountTime.getDate() - 1);
             }
           }
         }
-        // check new week
         if (
           (countTime.getTime() === baseDateTime.getTime() &&
             tempWeekAry.length === 7) ||
           (countTime.getTime() > baseDateTime && day === 6)
         ) {
-          // Next week
           tempMonthAry.push(tempWeekAry);
           tempWeekAry = [];
         }
-        // calculate next day
         countTime.setDate(countTime.getDate() + 1);
       }
-
       return tempMonthAry;
     },
     updateCalendar(offset = -1) {
       if (!this.startMonthDate) {
-        this.startMonthDate = this.selectStartDate
-          ? new Date(this.selectStartDate.getTime())
-          : new Date(new Date().getFullYear(), new Date().getMonth()); // now
+        this.startMonthDate = this.valueStartDate
+          ? new Date(this.valueStartDate.getTime())
+          : new Date(new Date().getFullYear(), new Date().getMonth());
       }
-
       this.startMonthDate.setMonth(this.startMonthDate.getMonth() + offset);
       this.endMonthDate = new Date(
         this.startMonthDate.getFullYear(),
         this.startMonthDate.getMonth() + 1,
       );
-
-      this.startMonthAry = [];
-      this.endMonthAry = [];
       this.startMonthAry = this.generateCalendar(
         this.startMonthDate.getFullYear(),
         this.startMonthDate.getMonth(),
@@ -294,8 +231,8 @@ export default {
       );
     },
     updateValue() {
-      this.valueStartDate = `${this.displayDateText(this.selectStartDate)}`;
-      this.valueEndDate = `${this.displayDateText(this.selectEndDate)}`;
+      this.valueStartDate = `${this.valueStartDate}`;
+      this.valueEndDate = `${this.valueEndDate}`;
     },
     disabledPreviousArrow(monthDatetime) {
       const now = new Date();
@@ -307,24 +244,13 @@ export default {
         0,
         0,
       );
-      if (monthDatetime && this.selectForward) {
-        if (this.selectMaxDate) {
-          if (monthDatetime.getFullYear() < this.selectMaxDate.getFullYear()) {
-            return 'disabled';
-          }
-          if (
-            monthDatetime.getFullYear() === this.selectMaxDate.getFullYear() &&
-            monthDatetime.getMonth() <= this.selectMaxDate.getMonth()
-          ) {
-            return 'disabled';
-          }
-        } else {
-          if (
-            monthDatetime.getFullYear() === today.getFullYear() &&
-            monthDatetime.getMonth() === today.getMonth()
-          ) {
-            return 'disabled';
-          }
+      const selectForward = true;
+      if (monthDatetime && selectForward) {
+        if (
+          monthDatetime.getFullYear() === today.getFullYear() &&
+          monthDatetime.getMonth() === today.getMonth()
+        ) {
+          return 'disabled';
         }
       }
     },
@@ -332,31 +258,25 @@ export default {
       const classList = [];
       const disabledDates = [];
       if (datetime) {
-        // check status
         if (this.selectMinDate.getTime() < datetime.getTime()) {
           classList.push('disabled');
-        } else if (
-          this.selectMaxDate &&
-          this.selectMaxDate.getTime() < datetime.getTime()
-        ) {
-          classList.push('disabled');
-        } else if (disabledDates.indexOf(this.displayDateText(datetime)) > -1) {
+        } else if (disabledDates.indexOf(datetime) > -1) {
           classList.push('disabled');
         } else if (
-          this.selectStartDate &&
-          this.selectStartDate.getTime() === datetime.getTime()
+          this.valueStartDate &&
+          this.valueStartDate.getTime() === datetime.getTime()
         ) {
           classList.push('start-date');
         } else if (
-          this.selectEndDate &&
-          this.selectEndDate.getTime() === datetime.getTime()
+          this.valueEndDate &&
+          this.valueEndDate.getTime() === datetime.getTime()
         ) {
           classList.push('end-date');
         } else if (
-          this.selectStartDate &&
-          this.selectEndDate &&
-          datetime.getTime() > this.selectStartDate.getTime() &&
-          datetime.getTime() < this.selectEndDate.getTime()
+          this.valueStartDate &&
+          this.valueEndDate &&
+          datetime.getTime() > this.valueStartDate.getTime() &&
+          datetime.getTime() < this.valueEndDate.getTime()
         ) {
           classList.push('in-date-range');
         }
@@ -365,60 +285,41 @@ export default {
     },
     dayOnClick(datetime) {
       if (datetime) {
-        if (!this.selectStartDate) {
-          this.selectStartDate = datetime;
-        } else if (!this.selectEndDate) {
+        if (!this.valueStartDate) {
+          this.valueStartDate = datetime;
+        } else if (!this.valueEndDate) {
           if (
-            this.selectStartDate &&
-            datetime.getTime() < this.selectStartDate.getTime()
+            this.valueStartDate &&
+            datetime.getTime() < this.valueStartDate.getTime()
           ) {
-            this.selectEndDate = this.selectStartDate;
+            this.valueEndDate = this.valueStartDate;
 
-            this.selectStartDate = datetime;
+            this.valueStartDate = datetime;
           } else {
-            this.selectEndDate = datetime;
+            this.valueEndDate = datetime;
           }
-        } else if (datetime.getTime() < this.selectStartDate.getTime()) {
-          this.selectStartDate = datetime;
-        } else if (datetime.getTime() > this.selectEndDate.getTime()) {
-          this.selectEndDate = datetime;
+        } else if (datetime.getTime() < this.valueStartDate.getTime()) {
+          this.valueStartDate = datetime;
+        } else if (datetime.getTime() > this.valueEndDate.getTime()) {
+          this.valueEndDate = datetime;
         } else if (
-          datetime.getTime() > this.selectStartDate.getTime() &&
-          datetime.getTime() < this.selectEndDate.getTime()
+          datetime.getTime() > this.valueStartDate.getTime() &&
+          datetime.getTime() < this.valueEndDate.getTime()
         ) {
           if (this.clickCount % 2 === 0) {
-            this.selectStartDate = datetime;
+            this.valueStartDate = datetime;
           } else {
-            this.selectEndDate = datetime;
+            this.valueEndDate = datetime;
           }
 
           this.clickCount++;
         }
-
-        let maxNight = null;
-        if (this.selectStartDate && this.selectEndDate && maxNight) {
-          const limitDate =
-            this.selectStartDate.getTime() + maxNight * 1000 * 60 * 60 * 24;
-          if (this.selectEndDate.getTime() > limitDate) {
-            this.selectEndDate = new Date(limitDate);
-          }
-        }
-        let minNight = null;
-        if (this.selectStartDate && this.selectEndDate && minNight) {
-          const limitDate =
-            this.selectStartDate.getTime() + minNight * 1000 * 60 * 60 * 24;
-          if (this.selectEndDate.getTime() < limitDate) {
-            this.selectEndDate = new Date(limitDate);
-          }
-        }
         const dateResult = {
-          start: this.displayDateText(this.selectStartDate),
-          end: this.displayDateText(this.selectEndDate),
+          start: this.valueStartDate,
+          end: this.valueEndDate,
         };
-
         this.$emit('click', dateResult);
-
-        if (this.selectStartDate && this.selectEndDate) {
+        if (this.valueStartDate && this.valueEndDate) {
           this.updateValue();
         }
       }
