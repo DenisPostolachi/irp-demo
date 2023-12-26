@@ -86,9 +86,6 @@
         </div>
       </div>
     </div>
-    <button class="bg-black w-[100px] h-[100px]" @click="consoleDate">
-      Console
-    </button>
   </div>
 </template>
 
@@ -98,14 +95,6 @@ export default {
     format: {
       type: String,
       default: 'YYYY/MM/DD',
-    },
-    startDate: {
-      type: [String, Date],
-      default: null,
-    },
-    endDate: {
-      type: [String, Date],
-      default: null,
     },
     minDate: {
       type: [String, Date],
@@ -118,26 +107,6 @@ export default {
           0,
           0,
         ),
-    },
-    maxDate: {
-      type: [String, Date, Boolean],
-      default: false,
-    },
-    minNight: {
-      type: Number,
-      default: null,
-    },
-    maxNight: {
-      type: Number,
-      default: null,
-    },
-    selectForward: {
-      type: Boolean,
-      default: true,
-    },
-    disabledDates: {
-      type: Array,
-      default: () => [],
     },
     value: {
       type: Object,
@@ -180,6 +149,7 @@ export default {
       endMonthAry: [],
       clickCount: 0,
       hoveredDay: null,
+      selectForward: true,
     };
   },
   created() {
@@ -190,59 +160,11 @@ export default {
           : this.minDate.getTime();
       this.selectMinDate = new Date(minDateValue);
     }
-    if (this.maxDate) {
-      const maxDateValue =
-        typeof this.maxDate === 'string'
-          ? this.maxDate
-          : this.maxDate.getTime();
-      this.selectMaxDate = new Date(maxDateValue);
-    }
-    if (this.startDate) {
-      const startDateValue =
-        typeof this.startDate === 'string'
-          ? this.startDate
-          : this.startDate.getTime();
-      this.selectStartDate = new Date(startDateValue);
-      if (
-        this.selectMinDate &&
-        this.selectMinDate.getTime() > this.selectStartDate.getTime()
-      ) {
-        this.selectMinDate = new Date(startDateValue);
-      }
-      if (!this.endDate) {
-        this.selectEndDate = new Date(
-          this.selectStartDate.getTime() + 24 * 60 * 60 * 1000,
-        );
-      } else {
-        const endDateValue =
-          typeof this.endDate === 'string'
-            ? this.endDate
-            : this.endDate.getTime();
-        this.selectEndDate = new Date(endDateValue);
-      }
 
-      this.updateValue();
-    }
-    this.updateCalendar(); // after setting
+    this.updateCalendar();
   },
 
-  computed: {
-    consoleDate() {
-      console.log('this valueStartDate:', this.valueStartDate);
-      console.log('this valueEndDate:', this.valueEndDate);
-      console.log('this startMonthDate:', this.startMonthDate);
-      console.log('this endMonthDate:', this.endMonthDate);
-      console.log('this selectStartDate:', this.selectStartDate);
-      console.log('this selectEndDate:', this.selectEndDate);
-      console.log('this selectMinDate:', this.selectMinDate);
-      console.log('this selectMaxDate:', this.selectMaxDate);
-      console.log('this startMonthAry:', this.startMonthAry);
-      console.log('this endMonthAry:', this.endMonthAry);
-      console.log('this clickCount:', this.clickCount);
-      console.log('this selectStartDate:', this.selectStartDate);
-      return false;
-    },
-  },
+  computed: {},
   watch: {
     // value: {
     // immediate: true,
@@ -255,13 +177,13 @@ export default {
   },
 
   methods: {
-    reset() {
-      this.selectStartDate = null;
-      this.selectEndDate = null;
-      this.valueStartDate = '';
-      this.valueEndDate = '';
-      this.$emit('reset');
-    },
+    // reset() {
+    //   this.selectStartDate = null;
+    //   this.selectEndDate = null;
+    //   this.valueStartDate = '';
+    //   this.valueEndDate = '';
+    //   this.$emit('reset');
+    // },
     displayDateText(datetime) {
       if (datetime) {
         datetime = typeof datetime === 'string' ? new Date(datetime) : datetime;
@@ -275,17 +197,19 @@ export default {
           datetime.getDate() > 9
             ? datetime.getDate()
             : `0${datetime.getDate()}`;
-        const displayStr = (this.format || 'YYYY/MM/DD')
+        return (this.format || 'YYYY/MM/DD')
           .replace('YYYY', yyyy)
           .replace('MM', mm)
           .replace('DD', dd);
-        return displayStr;
       }
     },
     generateCalendar(
       calculateYear = new Date().getFullYear(),
       calculateMonth = new Date().getMonth(),
-      config = {},
+      config = {
+        showPreviousMonthDate: false,
+        showNextMonthDate: false,
+      },
     ) {
       const showPreviousMonthDate = config.showPreviousMonthDate || false;
       const showNextMonthDate = config.showNextMonthDate || false;
@@ -322,7 +246,6 @@ export default {
           previousCountTime.setDate(previousCountTime.getDate());
           if (showPreviousMonthDate) {
             while (previousDay !== 0) {
-              // let previousDate = previousDateTime.getDate()
               let previousDateTime = new Date(previousCountTime.getTime());
               previousDay = previousDateTime.getDay();
               tempWeekAry[previousDay] = previousDateTime; // date obj
@@ -407,6 +330,7 @@ export default {
     },
     dayStatus(datetime) {
       const classList = [];
+      const disabledDates = [];
       if (datetime) {
         // check status
         if (this.selectMinDate.getTime() < datetime.getTime()) {
@@ -416,16 +340,7 @@ export default {
           this.selectMaxDate.getTime() < datetime.getTime()
         ) {
           classList.push('disabled');
-        } else if (
-          this.disabledDates.indexOf(this.displayDateText(datetime)) > -1
-        ) {
-          classList.push('disabled');
-          classList.push('forbidden');
-        } else if (
-          this.selectStartDate &&
-          this.selectStartDate.getTime() > datetime.getTime() &&
-          !this.selectForward
-        ) {
+        } else if (disabledDates.indexOf(this.displayDateText(datetime)) > -1) {
           classList.push('disabled');
         } else if (
           this.selectStartDate &&
@@ -479,20 +394,19 @@ export default {
 
           this.clickCount++;
         }
-        // check maxNight
-        if (this.selectStartDate && this.selectEndDate && this.maxNight) {
+
+        let maxNight = null;
+        if (this.selectStartDate && this.selectEndDate && maxNight) {
           const limitDate =
-            this.selectStartDate.getTime() +
-            this.maxNight * 1000 * 60 * 60 * 24;
+            this.selectStartDate.getTime() + maxNight * 1000 * 60 * 60 * 24;
           if (this.selectEndDate.getTime() > limitDate) {
             this.selectEndDate = new Date(limitDate);
           }
         }
-        // check minNight
-        if (this.selectStartDate && this.selectEndDate && this.minNight) {
+        let minNight = null;
+        if (this.selectStartDate && this.selectEndDate && minNight) {
           const limitDate =
-            this.selectStartDate.getTime() +
-            this.minNight * 1000 * 60 * 60 * 24;
+            this.selectStartDate.getTime() + minNight * 1000 * 60 * 60 * 24;
           if (this.selectEndDate.getTime() < limitDate) {
             this.selectEndDate = new Date(limitDate);
           }
