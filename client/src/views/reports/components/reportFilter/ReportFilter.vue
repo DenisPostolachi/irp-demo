@@ -11,14 +11,14 @@
       <report-calendar :value="filterValues.dates" @click="obgFilters" />
       <div class="wrapper">
         <div class="grid grid-cols-2 gap-3">
-          <component
-            v-for="(filter, index) in filters"
-            :key="index"
-            :is="filter.component"
-            v-model="filter.value"
-            :placeholder="filter.placeholder"
-            :filterValues="filterValues"
-          ></component>
+          <template v-for="filter in filters">
+            <component
+              v-for="(item, index) in filter"
+              :key="index"
+              :is="item.component"
+              v-model="filterValues.pageSize"
+            ></component
+          ></template>
         </div>
         <div>
           <div class="flex justify-end">
@@ -46,6 +46,7 @@ import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalend
 import AsNameInput from '@/views/reports/components/reportFilter/AsNameInput.vue';
 import PageInput from '@/views/reports/components/reportFilter/PageInput.vue';
 import PageSizeInput from '@/views/reports/components/reportFilter/PageSizeInput.vue';
+import PrefixInput from '@/views/reports/components/reportFilter/PrefixInput.vue';
 import { filters } from '@/views/reports/components/reportFilter/config';
 
 export default {
@@ -54,6 +55,7 @@ export default {
     AsNameInput,
     PageInput,
     PageSizeInput,
+    PrefixInput,
   },
   data: () => ({
     filterValues: {
@@ -118,10 +120,5 @@ export default {
   100% {
     border-color: #000;
   }
-}
-.hoverSlow:hover,
-.hoverSlow:focus {
-  animation: slowHover 1s linear forwards;
-  outline: none;
 }
 </style>
