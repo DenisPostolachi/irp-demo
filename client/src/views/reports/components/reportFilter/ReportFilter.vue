@@ -11,34 +11,16 @@
       <report-calendar :value="filterValues.dates" @click="obgFilters" />
       <div class="wrapper">
         <div class="grid grid-cols-2 gap-3">
-          <div>
-            <p class="pl-2 mb-3">AS name</p>
-            <input
-              v-model="filterValues.asName"
-              placeholder="Any As name"
-              type="text"
-              class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
-            />
-          </div>
-          <div>
-            <p class="pl-2 mb-3">Page</p>
-            <input
-              v-model="filterValues.page"
-              placeholder="Page"
-              type="text"
-              class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
-            />
-          </div>
-          <div>
-            <p class="pl-2 mb-3">Number of records</p>
-            <input
-              v-model="filterValues.pageSize"
-              type="text"
-              class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
-            />
-          </div>
+          <component
+            v-for="(filter, index) in filters"
+            :key="index"
+            :is="filter.component"
+            v-model="filter.value"
+            :placeholder="filter.placeholder"
+            :filterValues="filterValues"
+          ></component>
         </div>
-        <div class="">
+        <div>
           <div class="flex justify-end">
             <button
               @click="resetFilter"
@@ -61,15 +43,23 @@
 
 <script>
 import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalendar.vue';
+import AsNameInput from '@/views/reports/components/reportFilter/AsNameInput.vue';
+import PageInput from '@/views/reports/components/reportFilter/PageInput.vue';
+import PageSizeInput from '@/views/reports/components/reportFilter/PageSizeInput.vue';
+import { filters } from '@/views/reports/components/reportFilter/config';
 
 export default {
   components: {
     ReportCalendar,
+    AsNameInput,
+    PageInput,
+    PageSizeInput,
   },
   data: () => ({
     filterValues: {
       dates: {},
     },
+    filters: filters,
   }),
   computed: {
     savedFilters() {
