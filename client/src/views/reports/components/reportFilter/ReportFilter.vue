@@ -10,35 +10,15 @@
       <h4 class="text-lg font-medium mb-10">Filters</h4>
       <report-calendar :value="filterValues.dates" @click="obgFilters" />
       <div class="wrapper">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <p class="pl-2 mb-3">AS name</p>
-            <input
-              v-model="filterValues.asName"
-              placeholder="Any As name"
-              type="text"
-              class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
-            />
-          </div>
-          <div>
-            <p class="pl-2 mb-3">Page</p>
-            <input
-              v-model="filterValues.page"
-              placeholder="Page"
-              type="text"
-              class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
-            />
-          </div>
-          <div>
-            <p class="pl-2 mb-3">Number of records</p>
-            <input
-              v-model="filterValues.pageSize"
-              type="text"
-              class="hoverSlow border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 min-w-full"
-            />
-          </div>
+        <div>
+          <template>
+            <component
+              :is="reportFilterInput"
+              @updateFilterValues="updateFilterValues"
+            ></component
+          ></template>
         </div>
-        <div class="">
+        <div>
           <div class="flex justify-end">
             <button
               @click="resetFilter"
@@ -61,17 +41,25 @@
 
 <script>
 import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalendar.vue';
+import ReportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
+import { filters } from '@/views/reports/components/reportFilter/config';
+import reportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
 
 export default {
   components: {
     ReportCalendar,
+    ReportFilterInput,
   },
   data: () => ({
     filterValues: {
       dates: {},
     },
+    filters: filters,
   }),
   computed: {
+    reportFilterInput() {
+      return reportFilterInput;
+    },
     savedFilters() {
       return this.$store.getters.reportFilters;
     },
@@ -94,6 +82,9 @@ export default {
         ...this.filterValues,
         dates: { start: value.start, end: value.end },
       };
+    },
+    updateFilterValues(newFilterValues) {
+      this.filterValues = newFilterValues;
     },
   },
 };
@@ -128,10 +119,5 @@ export default {
   100% {
     border-color: #000;
   }
-}
-.hoverSlow:hover,
-.hoverSlow:focus {
-  animation: slowHover 1s linear forwards;
-  outline: none;
 }
 </style>
