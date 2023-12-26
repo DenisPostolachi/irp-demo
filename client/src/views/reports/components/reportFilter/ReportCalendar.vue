@@ -93,10 +93,6 @@ import { monthList } from '@/views/reports/components/reportFilter/config';
 
 export default {
   props: {
-    format: {
-      type: String,
-      default: 'YYYY/MM/DD',
-    },
     minDate: {
       type: [String, Date],
       default: () =>
