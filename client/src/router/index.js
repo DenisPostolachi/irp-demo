@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import DashboardViews from '@/views/dashboard/DashboardViews.vue';
 import ReportsViews from '@/views/reports/ReportsList.vue';
 import ReportViews from '@/views/reports/report/Report.vue';
+import Graph from '@/views/graphs/Graph.vue';
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,11 @@ const routes = [
     path: '/reports/historical-record',
     name: 'Historical Records',
     component: ReportViews,
+  },
+  {
+    path: '/reports/graphs',
+    name: 'Graphs',
+    component: Graph,
   },
 ];
 

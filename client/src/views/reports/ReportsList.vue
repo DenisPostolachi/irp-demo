@@ -14,7 +14,9 @@
         <div>
           <h3 class="text-4xl">Graphs</h3>
           <div v-for="graph in graphs" :key="graph.id">
-            <reports-graphs :graph="graph" />
+            <router-link :to="{ path: graph.slug }">
+              <reports-graphs :graph="graph" />
+            </router-link>
           </div>
         </div>
       </div>
