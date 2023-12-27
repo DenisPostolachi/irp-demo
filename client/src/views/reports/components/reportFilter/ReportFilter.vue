@@ -10,13 +10,10 @@
       <h4 class="text-lg font-medium mb-10">Filters</h4>
       <report-calendar :value="filterValues.dates" @click="obgFilters" />
       <div class="wrapper">
-        <div class="grid grid-cols-2 gap-3">
-          <template v-for="filter in filters">
+        <div>
+          <template>
             <component
-              v-for="(item, index) in filter"
-              :key="index"
-              :is="item.component"
-              :filterValues="filterValues"
+              :is="reportFilterInput"
               @updateFilterValues="updateFilterValues"
             ></component
           ></template>
@@ -44,19 +41,14 @@
 
 <script>
 import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalendar.vue';
-import AsNameInput from '@/views/reports/components/reportFilter/AsNameInput.vue';
-import PageInput from '@/views/reports/components/reportFilter/PageInput.vue';
-import PageSizeInput from '@/views/reports/components/reportFilter/PageSizeInput.vue';
-import PrefixInput from '@/views/reports/components/reportFilter/PrefixInput.vue';
+import ReportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
 import { filters } from '@/views/reports/components/reportFilter/config';
+import reportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
 
 export default {
   components: {
     ReportCalendar,
-    AsNameInput,
-    PageInput,
-    PageSizeInput,
-    PrefixInput,
+    ReportFilterInput,
   },
   data: () => ({
     filterValues: {
@@ -65,6 +57,9 @@ export default {
     filters: filters,
   }),
   computed: {
+    reportFilterInput() {
+      return reportFilterInput;
+    },
     savedFilters() {
       return this.$store.getters.reportFilters;
     },

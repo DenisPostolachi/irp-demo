@@ -16,26 +16,31 @@ const monthList = [
 const filters = {
   asNumber: [
     {
-      component: 'AsNameInput',
+      name: 'AS name',
       placeholder: 'Any As name',
+      key: 'asName',
     },
     {
-      component: 'PageInput',
+      name: 'Page',
       placeholder: 'Page',
+      key: 'page',
     },
     {
-      component: 'PageSizeInput',
+      name: 'Number of records',
       placeholder: 'Number of records',
+      key: 'pageSize',
     },
   ],
   historicalRecords: [
     {
-      component: 'PageSizeInput',
-      placeholder: 'Number of records',
+      name: 'Prefix',
+      placeholder: 'Prefix',
+      key: 'prefix',
     },
     {
-      component: 'PrefixInput',
-      placeholder: 'Prefix',
+      name: 'Number of records',
+      placeholder: 'Number of records',
+      key: 'pageSize',
     },
   ],
 };
