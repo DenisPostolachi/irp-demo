@@ -16,7 +16,8 @@
               v-for="(item, index) in filter"
               :key="index"
               :is="item.component"
-              v-model="filterValues.pageSize"
+              :filterValues="filterValues"
+              @updateFilterValues="updateFilterValues"
             ></component
           ></template>
         </div>
@@ -86,6 +87,9 @@ export default {
         ...this.filterValues,
         dates: { start: value.start, end: value.end },
       };
+    },
+    updateFilterValues(newFilterValues) {
+      this.filterValues = newFilterValues;
     },
   },
 };
