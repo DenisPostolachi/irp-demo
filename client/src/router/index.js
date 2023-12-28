@@ -30,7 +30,7 @@ const routes = [
   },
   {
     path: '/reports/graphs',
-    name: 'Graphs',
+    name: 'Loss Rates',
     component: Graph,
   },
 ];

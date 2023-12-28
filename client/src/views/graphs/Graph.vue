@@ -1,41 +1,48 @@
 <template>
-  <div id="container"></div>
+  <div>
+    <div class="flex justify-between w-fit z-200 items-center">
+      <p class="cursor-pointer" @click="backRoute">Reports</p>
+      <img
+        alt="arrow"
+        src="@/assets/img/down-arrow.svg"
+        class="rotate-[-90deg] w-3 mr-1 ml-1"
+      />
+      <p>{{ $route.name }}</p>
+    </div>
+    <div id="container"></div>
+  </div>
 </template>
 
 <script>
 import Highcharts from 'highcharts';
-
-import { getGraph } from '@/service/graphServices/api'; // Замените на правильный путь к файлу api.js
+import { getGraph } from '@/service/graphServices/api';
 
 export default {
   data() {
     return {
       chartData: [],
+      chart: null,
     };
   },
   methods: {
     async fetchData() {
       try {
         const response = await getGraph();
-        // Преобразовываем данные в нужный формат
         this.chartData = response.data[0].map((item) => ({
-          id: item.id,
           x: new Date(item.created_at).getTime(),
           y: item.volume,
-          created_at: item.created_at,
-          volume: item.volume,
         }));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     },
     createChart() {
-      Highcharts.chart('container', {
+      this.chart = Highcharts.chart('container', {
         chart: {
           type: 'line',
         },
         title: {
-          text: 'Graph Data',
+          text: 'Loss Rates',
         },
         xAxis: {
           type: 'datetime',
@@ -50,18 +57,30 @@ export default {
         },
         series: [
           {
-            name: 'Graph',
+            name: 'Volume',
             data: this.chartData,
           },
         ],
       });
     },
+    updateChart() {
+      this.chart.series[0].setData(this.chartData);
+    },
+    backRoute() {
+      this.$router.go(-1);
+    },
   },
   created() {
-    this.fetchData().then(() => {
-      this.$nextTick(() => {
-        this.createChart();
-      });
+    this.fetchData();
+  },
+  watch: {
+    chartData() {
+      this.updateChart();
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.createChart();
     });
   },
 };
