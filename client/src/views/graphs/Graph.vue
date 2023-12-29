@@ -74,6 +74,9 @@ export default {
     chartData() {
       this.updateChart();
     },
+    reportFilters() {
+      this.fetchData();
+    },
   },
   mounted() {
     this.$nextTick(() => {
