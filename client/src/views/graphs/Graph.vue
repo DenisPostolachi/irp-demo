@@ -1,14 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between w-fit z-200 items-center">
-      <p class="cursor-pointer" @click="backRoute">Reports</p>
-      <img
-        alt="arrow"
-        src="@/assets/img/down-arrow.svg"
-        class="rotate-[-90deg] w-3 mr-1 ml-1"
-      />
-      <p>{{ $route.name }}</p>
-    </div>
+    <report-header />
     <div id="container"></div>
   </div>
 </template>
@@ -16,8 +8,10 @@
 <script>
 import Highcharts from 'highcharts';
 import { getGraph } from '@/service/graphServices/api';
-
+import ReportHeader from '@/views/reports/components/ReportHeader.vue';
+import store from '@/store';
 export default {
+  components: { ReportHeader },
   data() {
     return {
       chartData: [],
@@ -27,7 +21,8 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const response = await getGraph();
+        const { start, end } = this.reportFilters;
+        const response = await getGraph(start, end);
         this.chartData = response.data[0].map((item) => ({
           x: new Date(item.created_at).getTime(),
           y: item.volume,
@@ -66,12 +61,14 @@ export default {
     updateChart() {
       this.chart.series[0].setData(this.chartData);
     },
-    backRoute() {
-      this.$router.go(-1);
-    },
   },
   created() {
     this.fetchData();
+  },
+  computed: {
+    reportFilters() {
+      return store.getters.reportFilters;
+    },
   },
   watch: {
     chartData() {
@@ -89,6 +86,5 @@ export default {
 <style>
 #container {
   width: 100%;
-  height: 400px;
 }
 </style>

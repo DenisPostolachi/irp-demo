@@ -5,7 +5,7 @@
         submit();
         $emit('toHideFilter');
       "
-      class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-50 w-[640px] pt-[60px] pl-3 pr-3"
+      class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-[2] w-[640px] pt-[60px] pl-3 pr-3"
     >
       <h4 class="text-lg font-medium mb-10">Filters</h4>
       <report-calendar :value="filterValues.dates" @click="obgFilters" />
