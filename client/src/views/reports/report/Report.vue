@@ -20,6 +20,7 @@ import ReportHeader from '@/views/reports/components/ReportHeader.vue';
 import ReportTable from '@/views/reports/components/ReportTable.vue';
 import ReportInfo from '@/views/reports/components/ReportInfo.vue';
 import store from '@/store';
+
 export default {
   name: 'ReportView',
   components: {
@@ -31,7 +32,6 @@ export default {
   data() {
     return {
       report: { headers: [] },
-      pagePaginator: 1,
       totalPages: 0,
     };
   },
@@ -40,19 +40,18 @@ export default {
       return store.getters.reportFilters;
     },
   },
-  created() {
-    this.fetchData();
+  async created() {
+    await this.fetchData();
   },
   watch: {
-    reportFilters() {
-      this.fetchData();
-    },
+    reportFilters: 'fetchData',
   },
   methods: {
     async fetchData() {
       try {
-        this.report = await getReport(this.$route.path, this.reportFilters);
-        this.totalPages = this.report.lastPage;
+        const response = await getReport(this.$route.path, this.reportFilters);
+        this.report = response;
+        this.totalPages = response.lastPage;
       } catch (error) {
         console.error(error);
       }
@@ -61,15 +60,13 @@ export default {
       store.commit('applyFilters', { page: value });
     },
     prevPage() {
-      if (store.state.filters.page > 1) {
-        store.state.filters.page--;
-        this.fetchData();
+      if (this.reportFilters.page > 1) {
+        store.commit('applyFilters', { page: this.reportFilters.page - 1 });
       }
     },
     nextPage() {
-      if (store.state.filters.page < this.totalPages) {
-        store.state.filters.page++;
-        this.fetchData();
+      if (this.reportFilters.page < this.totalPages) {
+        store.commit('applyFilters', { page: this.reportFilters.page + 1 });
       }
     },
   },

@@ -23,7 +23,7 @@ export default {
       try {
         const { start, end } = this.reportFilters;
         const response = await getGraph(start, end);
-        this.chartData = response.data[0].map((item) => ({
+        this.chartData = response.data.map((item) => ({
           x: new Date(item.created_at).getTime(),
           y: item.volume,
         }));

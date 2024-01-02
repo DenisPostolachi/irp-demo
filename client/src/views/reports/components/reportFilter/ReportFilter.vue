@@ -1,38 +1,31 @@
 <template>
   <div class="filter">
     <div
-      @keyup.enter="
-        submit();
-        $emit('toHideFilter');
-      "
+      @keyup.enter="applyFiltersAndHide"
       class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-[2] w-[640px] pt-[60px] pl-3 pr-3"
     >
       <h4 class="text-lg font-medium mb-10">Filters</h4>
-      <report-calendar :value="filterValues.dates" @click="obgFilters" />
+      <report-calendar :value="filterValues.dates" @click="updateDateFilters" />
       <div class="wrapper">
         <div>
-          <template>
-            <component
-              :is="reportFilterInput"
-              @updateFilterValues="updateFilterValues"
-            ></component
-          ></template>
+          <component
+            :is="selectedFilterComponent"
+            @updateFilterValues="updateFilterValues"
+          ></component>
         </div>
-        <div>
-          <div class="flex justify-end">
-            <button
-              @click="resetFilter"
-              class="bg-[#c2c2c2] hover:bg-[#9c9c9c] mr-4 p-2 rounded-2xl color-[#515151] font-bold text-xs w-[80px] uppercase"
-            >
-              reset
-            </button>
-            <button
-              @click="submit"
-              class="bg-[#ff8400] hover:bg-[#e67700] p-2 rounded-2xl text-white font-bold text-xs w-[80px] uppercase"
-            >
-              apply
-            </button>
-          </div>
+        <div class="flex justify-end">
+          <button
+            @click="resetFiltersAndHide"
+            class="filter-button reset-button"
+          >
+            reset
+          </button>
+          <button
+            @click="applyFiltersAndHide"
+            class="filter-button apply-button"
+          >
+            apply
+          </button>
         </div>
       </div>
     </div>
@@ -42,24 +35,21 @@
 <script>
 import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalendar.vue';
 import ReportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
-import { filters } from '@/views/reports/components/reportFilter/config';
-import reportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
 
 export default {
   components: {
     ReportCalendar,
     ReportFilterInput,
   },
-  data: () => ({
-    filterValues: {
-      dates: {},
-    },
-    filters: filters,
-  }),
+  data() {
+    return {
+      filterValues: {
+        dates: {},
+      },
+      selectedFilterComponent: ReportFilterInput,
+    };
+  },
   computed: {
-    reportFilterInput() {
-      return reportFilterInput;
-    },
     savedFilters() {
       return this.$store.getters.reportFilters;
     },
@@ -68,16 +58,19 @@ export default {
     this.filterValues = { ...this.savedFilters };
   },
   methods: {
-    submit() {
-      this.$emit('toHideFilter');
+    applyFiltersAndHide() {
+      this.hideFilterComponent();
       this.$store.commit('applyFilters', this.filterValues);
     },
-    resetFilter() {
-      this.$emit('toHideFilter');
+    resetFiltersAndHide() {
+      this.hideFilterComponent();
       this.$store.commit('resetFilters');
       this.filterValues = { ...this.savedFilters };
     },
-    obgFilters(value) {
+    hideFilterComponent() {
+      this.$emit('toHideFilter');
+    },
+    updateDateFilters(value) {
       this.filterValues = {
         ...this.filterValues,
         dates: { start: value.start, end: value.end },
@@ -89,6 +82,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .filter {
   position: relative;
@@ -112,12 +106,25 @@ export default {
     opacity: 1;
   }
 }
-@keyframes slowHover {
-  0% {
-    border-color: #e9e9e9;
-  }
-  100% {
-    border-color: #000;
-  }
+.filter-button {
+  padding: 2px;
+  border-radius: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 80px;
+}
+.reset-button {
+  background-color: #c2c2c2;
+  color: #515151;
+}
+.reset-button:hover {
+  background-color: #9c9c9c;
+}
+.apply-button {
+  background-color: #ff8400;
+  color: #fff;
+}
+.apply-button:hover {
+  background-color: #e67700;
 }
 </style>
