@@ -16,13 +16,13 @@
         <div class="flex justify-end">
           <button
             @click="resetFiltersAndHide"
-            class="filter-button reset-button"
+            class="bg-[#c2c2c2] hover:bg-[#9c9c9c] mr-4 p-2 rounded-2xl color-[#515151] font-bold text-xs w-[80px] uppercase"
           >
             reset
           </button>
           <button
             @click="applyFiltersAndHide"
-            class="filter-button apply-button"
+            class="bg-[#ff8400] hover:bg-[#e67700] p-2 rounded-2xl text-white font-bold text-xs w-[80px] uppercase"
           >
             apply
           </button>
@@ -105,26 +105,5 @@ export default {
   to {
     opacity: 1;
   }
-}
-.filter-button {
-  padding: 2px;
-  border-radius: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  width: 80px;
-}
-.reset-button {
-  background-color: #c2c2c2;
-  color: #515151;
-}
-.reset-button:hover {
-  background-color: #9c9c9c;
-}
-.apply-button {
-  background-color: #ff8400;
-  color: #fff;
-}
-.apply-button:hover {
-  background-color: #e67700;
 }
 </style>
