@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between">
+
       <div class="w-[100%] mr-3">
         <p class="ml-1 mb-1" v-if="isGraphsRoute">Start</p>
         <input
@@ -158,7 +159,6 @@ export default {
       return this.$route.path === '/reports/graphs';
     },
   },
-
   methods: {
     generateCalendar(
       calculateYear = new Date().getFullYear(),
