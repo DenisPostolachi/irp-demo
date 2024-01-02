@@ -10,7 +10,7 @@ export class TimeLineController {
   getTimeLineGraph(
     @Query('start') start: Date,
     @Query('end') end: Date,
-  ): Promise<{ data: TimeLine[][] }> {
+  ): Promise<{ data: TimeLine[] }> {
     return this.timelineService.getTimeLineGraph(start, end);
   }
 }

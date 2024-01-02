@@ -1,11 +1,8 @@
 <template>
   <div class="filter">
     <div
-      @keyup.enter="
-        submit();
-        $emit('toHideFilter');
-      "
-      class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-50 w-[640px] pt-[60px] pl-3 pr-3"
+      @keyup.enter="applyFiltersAndHide"
+      class="filter-component block absolute top-[-100px] right-[-20px] bottom-0 bg-white drop-shadow-2xl z-[2] w-[640px] pt-[60px] pl-3 pr-3"
     >
       <h4 class="text-lg font-medium mb-10">Filters</h4>
       <report-calendar :value="filterValues.dates" @click="obgFilters" />
@@ -42,20 +39,20 @@
 <script>
 import ReportCalendar from '@/views/reports/components/reportFilter/ReportCalendar.vue';
 import ReportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
-import { filters } from '@/views/reports/components/reportFilter/config';
-import reportFilterInput from '@/views/reports/components/reportFilter/ReportFilterInput.vue';
-
 export default {
   components: {
     ReportCalendar,
     ReportFilterInput,
   },
-  data: () => ({
-    filterValues: {
-      dates: {},
-    },
-    filters: filters,
-  }),
+
+  data() {
+    return {
+      filterValues: {
+        dates: {},
+      },
+      selectedFilterComponent: ReportFilterInput,
+    };
+  },
   computed: {
     reportFilterInput() {
       return reportFilterInput;
@@ -68,16 +65,20 @@ export default {
     this.filterValues = { ...this.savedFilters };
   },
   methods: {
-    submit() {
-      this.$emit('toHideFilter');
+    applyFiltersAndHide() {
+      this.hideFilterComponent();
       this.$store.commit('applyFilters', this.filterValues);
     },
-    resetFilter() {
-      this.$emit('toHideFilter');
+    resetFiltersAndHide() {
+      this.hideFilterComponent();
       this.$store.commit('resetFilters');
       this.filterValues = { ...this.savedFilters };
     },
-    obgFilters(value) {
+    hideFilterComponent() {
+      this.$emit('toHideFilter');
+    },
+    updateDateFilters(value) {
+
       this.filterValues = {
         ...this.filterValues,
         dates: { start: value.start, end: value.end },
@@ -89,6 +90,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .filter {
   position: relative;
@@ -110,14 +112,6 @@ export default {
   }
   to {
     opacity: 1;
-  }
-}
-@keyframes slowHover {
-  0% {
-    border-color: #e9e9e9;
-  }
-  100% {
-    border-color: #000;
   }
 }
 </style>

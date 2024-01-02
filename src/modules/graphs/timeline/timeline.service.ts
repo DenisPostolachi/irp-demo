@@ -13,7 +13,7 @@ export class TimeLineService {
   async getTimeLineGraph(
     start?: Date,
     end?: Date,
-  ): Promise<{ data: TimeLine[][] }> {
+  ): Promise<{ data: TimeLine[] }> {
     const queryBuilder =
       this.timeLineGraphRepository.createQueryBuilder('time_line');
 
@@ -29,7 +29,7 @@ export class TimeLineService {
 
     const results = await queryBuilder.getMany();
     return {
-      data: [results],
+      data: results,
     };
   }
 }

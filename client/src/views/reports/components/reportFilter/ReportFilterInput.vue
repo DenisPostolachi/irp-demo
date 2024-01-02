@@ -28,7 +28,6 @@ export default {
   computed: {
     selectedFilters() {
       const currentRoute = this.$route.path;
-      console.log(this.$route.path);
       if (currentRoute === '/reports/historical-record') {
         return this.filters.historicalRecords;
       } else if (currentRoute === '/reports/asnumber') {

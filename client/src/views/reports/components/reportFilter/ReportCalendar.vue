@@ -1,16 +1,23 @@
 <template>
   <div>
     <div class="flex justify-between">
-      <input
-        v-model="valueStartDate"
-        class="border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 mr-3 w-1/2 cursor-not-allowed"
-        readonly
-      />
-      <input
-        v-model="valueEndDate"
-        class="border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 w-1/2 cursor-not-allowed"
-        readonly
-      />
+
+      <div class="w-[100%] mr-3">
+        <p class="ml-1 mb-1" v-if="isGraphsRoute">Start</p>
+        <input
+          v-model="valueStartDate"
+          class="border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 mr-3 w-[100%] cursor-not-allowed"
+          readonly
+        />
+      </div>
+      <div class="w-[100%]">
+        <p class="ml-1 mb-1" v-if="isGraphsRoute">End</p>
+        <input
+          v-model="valueEndDate"
+          class="border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] w-[100%] p-2 cursor-not-allowed"
+          readonly
+        />
+      </div>
     </div>
     <div class="flex justify-center items-center mt-8 mb-8 w-[648px]">
       <div class="w-[50%] h-[284px]">
@@ -112,8 +119,7 @@ export default {
   },
   data() {
     return {
-      valueStartDate: null,
-      valueEndDate: null,
+
       startMonthDate: null,
       endMonthDate: null,
       selectMinDate: null,
@@ -121,6 +127,9 @@ export default {
       endMonthAry: [],
       clickCount: 0,
       allMonthList: monthList,
+      valueStartDate: this.$store.getters.reportFilters,
+      valueEndDate: this.$store.getters.reportFilters,
+
     };
   },
   created() {
@@ -145,6 +154,11 @@ export default {
           this.valueEndDate = dates.end;
         }
       },
+    },
+  },
+  computed: {
+    isGraphsRoute() {
+      return this.$route.path === '/reports/graphs';
     },
   },
   methods: {
@@ -225,10 +239,6 @@ export default {
         this.endMonthDate.getFullYear(),
         this.endMonthDate.getMonth(),
       );
-    },
-    updateValue() {
-      this.valueStartDate = `${this.valueStartDate}`;
-      this.valueEndDate = `${this.valueEndDate}`;
     },
     disabledPreviousArrow(monthDatetime) {
       const now = new Date();
@@ -315,9 +325,6 @@ export default {
           end: this.valueEndDate,
         };
         this.$emit('click', dateResult);
-        if (this.valueStartDate && this.valueEndDate) {
-          this.updateValue();
-        }
       }
     },
   },

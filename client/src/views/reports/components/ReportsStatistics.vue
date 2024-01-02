@@ -46,7 +46,7 @@
 export default {
   props: ['report'],
   data() {
-    return { hovered: null, hoveredReport: null };
+    return { hoveredReport: null };
   },
 };
 </script>
