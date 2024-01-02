@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between">
+
       <div class="w-[100%] mr-3">
         <p class="ml-1 mb-1" v-if="isGraphsRoute">Start</p>
         <input
@@ -118,6 +119,7 @@ export default {
   },
   data() {
     return {
+
       startMonthDate: null,
       endMonthDate: null,
       selectMinDate: null,
@@ -127,6 +129,7 @@ export default {
       allMonthList: monthList,
       valueStartDate: this.$store.getters.reportFilters,
       valueEndDate: this.$store.getters.reportFilters,
+
     };
   },
   created() {
@@ -158,7 +161,6 @@ export default {
       return this.$route.path === '/reports/graphs';
     },
   },
-
   methods: {
     generateCalendar(
       calculateYear = new Date().getFullYear(),
