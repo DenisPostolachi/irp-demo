@@ -15,6 +15,7 @@ const graphs = [
   {
     id: 1,
     name: 'Loss Rates',
+    slug: 'reports/graphs',
   },
 ];
 
