@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="slide-in-left">
     <report-header />
     <div id="container"></div>
   </div>
@@ -89,5 +89,20 @@ export default {
 <style>
 #container {
   width: 100%;
+}
+.slide-in-left {
+  animation: slideInLeft 0.7s ease forwards;
+  position: relative;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 </style>

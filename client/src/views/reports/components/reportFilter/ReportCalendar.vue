@@ -6,7 +6,6 @@
         <input
           v-model="valueStartDate"
           class="border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] p-2 mr-3 w-[100%] cursor-not-allowed"
-          @input="setStartDate"
           readonly
         />
       </div>
@@ -15,7 +14,6 @@
         <input
           v-model="valueEndDate"
           class="border-2 border-[#e9e9e9] border-solid rounded-2xl h-[38px] w-[100%] p-2 cursor-not-allowed"
-          @input="setEndDate"
           readonly
         />
       </div>
@@ -127,8 +125,8 @@ export default {
       endMonthAry: [],
       clickCount: 0,
       allMonthList: monthList,
-      valueStartDate: this.$store.getters.getStartDate,
-      valueEndDate: this.$store.getters.getEndDate,
+      valueStartDate: this.$store.getters.reportFilters,
+      valueEndDate: this.$store.getters.reportFilters,
     };
   },
   created() {
@@ -240,12 +238,6 @@ export default {
         this.endMonthDate.getMonth(),
       );
     },
-    setStartDate() {
-      this.$store.commit('setStartDate', this.valueStartDate);
-    },
-    setEndDate() {
-      this.$store.commit('setEndDate', this.valueEndDate);
-    },
     disabledPreviousArrow(monthDatetime) {
       const now = new Date();
       const today = new Date(
@@ -331,9 +323,6 @@ export default {
           end: this.valueEndDate,
         };
         this.$emit('click', dateResult);
-        if (this.valueStartDate && this.valueEndDate) {
-          this.updateValue();
-        }
       }
     },
   },
