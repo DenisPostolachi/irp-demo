@@ -54,8 +54,16 @@ export default {
         this.report = await getReport(this.$route.path, this.reportFilters);
         this.totalPages = this.report.lastPage;
       } catch (error) {
+        this.showMessage();
         console.error(error);
       }
+    },
+    showMessage() {
+      this.$store.commit('showSnackbar', {
+        message: 'Data is not defined',
+        color: '#ff0033',
+        duration: 3000,
+      });
     },
     changePage(value) {
       store.commit('applyFilters', { page: value });

@@ -28,16 +28,21 @@
               <td
                 v-for="(row, index) in Object.values(data)"
                 :key="row.id"
-                class="whitespace-nowrap px-6 py-4 font-medium"
+                class="whitespace-nowrap px-6 py-4 font-medium last:flex items-center"
               >
                 {{ rowFormer(row, data, index) }}
-                <button
-                  class="block"
-                  v-if="Object.values(data).length - 1 === index"
-                  @click="addReport(data)"
-                >
-                  <img alt="eye-open" src="../../../assets/img/eye-open.svg" />
-                </button>
+                <div class="ml-2">
+                  <button
+                    class="block"
+                    v-if="Object.values(data).length - 1 === index"
+                    @click="addReport(data)"
+                  >
+                    <img
+                      alt="eye-open"
+                      src="../../../assets/img/eye-open.svg"
+                    />
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -48,15 +53,20 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
 import store from '@/store';
-export default defineComponent({
-  name: 'ReportTable',
+
+export default {
   props: {
     report: {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      clickedReportItem: [],
+      addedReportItem: store.getters.getInfoReports,
+    };
   },
   computed: {
     formattedHeaders() {
@@ -76,11 +86,12 @@ export default defineComponent({
     addReport(data) {
       store.commit('addReportItem', data);
     },
+
     rowFormer(row, data, index) {
       return Object.keys(data)[index] === 'created_at'
         ? this.formatDate(row)
         : row;
     },
   },
-});
+};
 </script>

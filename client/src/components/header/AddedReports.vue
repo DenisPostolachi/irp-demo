@@ -13,11 +13,7 @@
           v-for="item in infoReports"
           :key="item.id"
         >
-          <div
-            class=""
-            v-for="(value, key, index) in getFormattedKeys(item)"
-            :key="key"
-          >
+          <div v-for="(value, key, index) in getFormattedKeys(item)" :key="key">
             <template v-if="index < 3">
               <p class="inline-block">{{ key }}: {{ value }}</p>
             </template>
