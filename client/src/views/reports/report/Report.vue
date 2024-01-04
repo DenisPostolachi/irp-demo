@@ -59,11 +59,18 @@ export default {
       }
     },
     showMessage() {
-      this.$store.commit('showSnackbar', {
+      store.commit('showSnackbar', {
         message: 'Data is not defined',
         color: '#ff0033',
-        duration: 3000,
       });
+      const { timeoutId } = store.getters.getSnackbarData;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      const newTimeoutId = setTimeout(() => {
+        store.commit('hideSnackbar');
+      }, 4000);
+      store.commit('setTimeoutId', newTimeoutId);
     },
     changePage(value) {
       store.commit('applyFilters', { page: value });

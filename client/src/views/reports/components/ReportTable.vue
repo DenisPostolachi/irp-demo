@@ -54,6 +54,7 @@
 
 <script>
 import store from '@/store';
+import { formatDate } from '@/helpers/helpers';
 
 export default {
   props: {
@@ -78,19 +79,34 @@ export default {
     },
   },
   methods: {
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-      return date.toLocaleDateString('en-GB', options);
-    },
     addReport(data) {
+      this.showMessage(data);
       store.commit('addReportItem', data);
     },
-
+    showMessage(data) {
+      store.commit('showSnackbar', {
+        message: `Added: ${this.formattedHeaders
+          .slice(0, 3)
+          .map((header, index) => {
+            if (header === 'Created At') {
+              return `${header}: ${formatDate(Object.values(data)[index])}`;
+            }
+            return `${header}: ${Object.values(data)[index]}`;
+          })
+          .join(', ')}`,
+        color: '#04AF70',
+      });
+      const { timeoutId } = store.getters.getSnackbarData;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      const newTimeoutId = setTimeout(() => {
+        store.commit('hideSnackbar');
+      }, 4000);
+      store.commit('setTimeoutId', newTimeoutId);
+    },
     rowFormer(row, data, index) {
-      return Object.keys(data)[index] === 'created_at'
-        ? this.formatDate(row)
-        : row;
+      return Object.keys(data)[index] === 'created_at' ? formatDate(row) : row;
     },
   },
 };

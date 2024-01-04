@@ -10,4 +10,10 @@ function getFormattedKeys(item) {
   return formattedKeys;
 }
 
-export { getFormattedKeys };
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+  return date.toLocaleDateString('en-GB', options);
+}
+
+export { getFormattedKeys, formatDate };

@@ -1,12 +1,13 @@
 <template>
   <div
     v-if="snackbar.show"
-    :class="`border-[${snackbar.color}]`"
-    class="slide-in-left bg-white drop-shadow-2xl border-solid rounded-lg w-[250px] h-[100px] p-1 z-[150] absolute bottom-[10px] left-[80px]"
+    :style="{ borderColor: snackbar.color }"
+    class="slide-in-left bg-white drop-shadow-2xl border-solid rounded-lg w-[270px] h-[120px] p-1 z-[150] fixed bottom-[10px] left-[80px]"
   >
-    <div @click="closeSnackbar" class="flex justify-end items-start">
+    <div class="flex justify-end items-start">
       <img
-        class="h-[20px] cursor-pointer"
+        @click="closeSnackbar"
+        class="h-[20px] cursor-pointer hover:bg-[#e9e9e9] rounded-xl"
         alt="cross"
         src="@/assets/img/cross.svg"
       />
@@ -30,7 +31,7 @@ export default {
   },
   methods: {
     closeSnackbar() {
-      this.$store.commit('hideSnackbar');
+      store.commit('hideSnackbar');
     },
   },
 };

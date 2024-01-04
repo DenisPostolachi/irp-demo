@@ -3,19 +3,25 @@ const state = {
     show: false,
     message: '',
     color: '',
-    duration: 3000,
+    timeoutId: null,
   },
 };
 
 const mutations = {
-  showSnackbar: (state, { message, color, duration }) => {
+  showSnackbar: (state, { message, color }) => {
     state.snackbar.show = true;
     state.snackbar.message = message;
     state.snackbar.color = color;
-    state.snackbar.duration = duration;
   },
-  hideSnackbar: (state) => {
+  hideSnackbar(state) {
     state.snackbar.show = false;
+    state.snackbar.message = '';
+    state.snackbar.color = '';
+    clearTimeout(state.snackbar.timeoutId);
+    state.snackbar.timeoutId = null;
+  },
+  setTimeoutId(state, timeoutId) {
+    state.snackbar.timeoutId = timeoutId;
   },
 };
 
